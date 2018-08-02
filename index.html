@@ -150,7 +150,6 @@ function CreateFollowListHelix(userName) {
 		headers: { 'Client-ID': '88pfy9ckfkxt3mp678i4ar9b0tr2q6' },
 		success: function(data) {
 			//console.log(data);
-			userMixer = data.data[0].id;
 			$.ajax({
 				type: 'GET',
 				url: 'https://api.twitch.tv/helix/users/follows?from_id=' + data.data[0].id,
@@ -265,7 +264,7 @@ function CreateFollowListMixer(userName) {
 		headers: { 'Client-ID': '07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6' },
 		success: function(data, textstatus, jqxhr) {
 			//console.log(data);
-			//console.log(jqxhr.getResponseHeader('x-total-count'));
+			userMixer = data.user.id;
 			$.ajax({
 				type: 'GET',
 				url: 'https://mixer.com/api/v1/users/' + data.user.id + '/follows',
