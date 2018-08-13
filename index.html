@@ -5,62 +5,98 @@
 		<script src="jquery-3.3.1.min.js"></script>
 		<title>Ethereal Channel Viewer</title>
 		<style>
-html           { height: 100%; }
-body           { height: 100%; margin: 0; background-color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; color: #262626; }
-a              { text-decoration: none; }
-p              { margin: 0; }
-.inline-block  { display: inline-block; }
-.table         { display: table; width: 100%; }
-.row           { display: table-row; }
-.cell          { display: table-cell; vertical-align: middle; }
-.content-table { display: inline-table; vertical-align: middle; }
-.title         { font-weight: bold; }
-#page-table    { display: table; height: 100%; text-align: center; }
-#total-cell    { display: table-cell; height: 100%; vertical-align: middle; }
+html                { height: 100%; }
+body                { height: 100%; margin: 0; background-color: #F1F1F1; color: #262626; font-family: Helvetica, Arial, sans-serif; }
+a                   { text-decoration: none; }
+p                   { margin: 0; }
+div.page-table      { display: table; height: 100%; }
+div.page-cell       { display: table-cell; height: 100%; vertical-align: middle; }
+div.table           { display: table; }
+div.row             { display: table-row; }
+div.cell            { display: table-cell; vertical-align: middle; }
+div.inline-table    { display: inline-table;  }
+div.inline-block    { display: inline-block; }
+.title              { font-weight: bold; }
+.input-text         { width: 150px; }
+.input-button       { width: 150px; }
+#left-bar           { width: 250px; height: 720px; background-color: #262626; color: #F1F1F1; overflow-x: hidden; text-align: center }
+#content            { text-align: center; }
+#follow-table-helix { width: 100%; }
+#follow-table-mixer { width: 100%; }
+iframe              { display: block; }
 		</style>
 	</head>
 	<body onload="AssignButtons();">
-<!-- PAGE -->
-		<div id="page-table">
-<!-- CONTENT -->
-			<div id="total-cell">
-<!-- USER MOD -->
-				<div class="content-table">
-					<div class="inline-block, title" id="current-user">No User Loaded</div>
-					<div class="inline-block"><input type="text" id="input-user" /><input type="button" value="Load User" id="button-user" onclick="LoadUser(document.getElementById('input-user').value);" /></div>
-				</div>
-<!-- CHANNEL MOD -->
-				<div class="content-table">
-					<div class="inline-block, title" id="current-channel">No Channel Loaded</div>
-					<div class="inline-block">
-						<input type="text" id="input-channel-twitch" />
-						<input type="button" value="Load Twitch Channel" id="button-channel-twitch" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" />
-						<input type="text" id="input-channel-mixer" />
-						<input type="button" value="Load Mixer Channel" id="button-channel-mixer" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer');" />
+<!-- PAGE TABLE -->
+		<div class="page-table">
+<!-- PAGE CELL -->
+			<div class="page-cell">
+				<div class="table">
+	<!-- LEFT BAR -->
+					<div class="cell" style="vertical-align: bottom;">
+						<div class="table" id="left-bar">
+							<div class="row">
+								<div class="cell">
+									<p><span id="reset-form"></span></p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									<p class="title"><span title="click to update" onclick="UpdateFollowListHelix();">[twitch]</span></p>
+									<div id="follows-helix"></div>
+									<p class="title"><span title="click to update" onclick="UpdateFollowListMixer();">[mixer]</span></p>
+									<div id="follows-mixer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+	<!-- CONTENT -->
+					<div class="cell">
+						<div class="table" id="content">
+							<div class="row">
+								<div class="cell">
+									<div class="inline-table">
+										<div class="row">
+											<div class="cell">
+												<p class="title" id="current-user">No User Loaded</p>
+											</div>
+										</div>
+										<div class="row">
+											<div class="cell">
+												<input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value);" />
+											</div>
+										</div>
+									</div>
+									<div class="inline-table">
+										<div class="row">
+											<div class="cell">
+												<p class="title" id="current-channel">No Channel Loaded</p>
+											</div>
+										</div>
+										<div class="row">
+											<div class="cell">
+												<input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="cell">
+												<input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer');" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									<iframe id="frame-player" src="https://player.twitch.tv/?channel=" frameborder="0" allowfullscreen="true" scrolling="no" width="1280" height="720"></iframe>
+								</div>
+								<div class="cell">
+									<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="720"></iframe>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-<!-- FOLLOWS & CHANNEL & CHAT -->
-				<div class="content-table">
-					<div class="row">
-<!-- FOLLOWS -->
-						<div class="cell">
-							<p class="title"><span onclick="UpdateFollowListHelix();">twitch (click to update)</span></p>
-							<div id="follows-helix"></div>
-							<p class="title"><span onclick="UpdateFollowListMixer();">mixer (click to update)</span></p>
-							<div id="follows-mixer"></div>
-						</div>
-<!-- CHANNEL -->
-						<div class="cell">
-							<iframe id="frame-player" src="https://player.twitch.tv/?channel=" frameborder="0" allowfullscreen="true" scrolling="no" width="1280" height="720"></iframe>
-						</div>
-<!-- CHAT -->
-						<div class="cell">
-							<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="720"></iframe>
-						</div>
-
-					</div>
-				</div>
-
 			</div>
 		</div>
 		<script>
@@ -78,6 +114,7 @@ var hasCountTwitch, hasCountMixer;
 var tableT, rowT, cellT, pT, spanT;
 var tableM, rowM, cellM, pM, spanM;
 var ii, jj;
+//var reset;
 
 function AssignButtons() {
 	var element;
@@ -147,8 +184,9 @@ function CreateFollowListHelix() {
 		type: "GET",
 		url: "https://api.twitch.tv/helix/users?login=" + g_userName,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
-		success: function(data) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
+			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataUserTwitch = data;
 			GetFollowsHelix(true, false);
 		}
@@ -181,33 +219,29 @@ function GetFollowsHelix(init, destroy) {
 		type: "GET",
 		url: "https://api.twitch.tv/helix/users/follows?from_id=" + dataUserTwitch.data[0].id + "&first=100&after=" + pageHelix,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
-		success: function(data) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
+			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataFollowsTwitch = data;
 			if (!hasCountTwitch) {
-				countHelix = parseInt(data.total);
-				countHelix -= data.data.length;
+				countHelix = parseInt(dataFollowsTwitch.total);
+				countHelix -= dataFollowsTwitch.data.length;
 				hasCountTwitch = true;
 			} else {
-				countHelix -= data.data.length;
+				countHelix -= dataFollowsTwitch.data.length;
 			}
-			pageHelix = data.pagination.cursor;
+			pageHelix = dataFollowsTwitch.pagination.cursor;
 			isFirstId = true;
 			urlUsersTwitch = "https://api.twitch.tv/helix/users";
 			urlStreamsTwitch = "https://api.twitch.tv/helix/streams";
-			userObjT.user = [];
-			for (ii = 0 ; ii < data.data.length ; ii++) {
-				userObjT.user[ii] = { id: "", login: "" };
-				userObjT.user[ii].id = data.data[ii].to_id;
-
-				// create complete URL for all-in-one name request
+			for (ii = 0 ; ii < dataFollowsTwitch.data.length ; ii++) {
 				if (isFirstId) { // with first id add ? instead of &
-					urlUsersTwitch = urlUsersTwitch + "?id=" + data.data[ii].to_id;
-					urlStreamsTwitch = urlStreamsTwitch + "?user_id=" + data.data[ii].to_id;
+					urlUsersTwitch = urlUsersTwitch + "?id=" + dataFollowsTwitch.data[ii].to_id;
+					urlStreamsTwitch = urlStreamsTwitch + "?user_id=" + dataFollowsTwitch.data[ii].to_id;
 					isFirstId = false;
 				} else {
-					urlUsersTwitch = urlUsersTwitch + "&id=" + data.data[ii].to_id;
-					urlStreamsTwitch = urlStreamsTwitch + "&user_id=" + data.data[ii].to_id;
+					urlUsersTwitch = urlUsersTwitch + "&id=" + dataFollowsTwitch.data[ii].to_id;
+					urlStreamsTwitch = urlStreamsTwitch + "&user_id=" + dataFollowsTwitch.data[ii].to_id;
 				}
 			}
 		},
@@ -222,15 +256,13 @@ function GetUsersHelix() {
 		type: "GET",
 		url: urlUsersTwitch,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
-		success: function(data) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
+			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataUsersTwitch = data;
-			for (ii = 0 ; ii < data.data.length ; ii++) {
-				for (jj = 0 ; jj < dataFollowsTwitch.data.length ; jj++) {
-					if (userObjT.user[jj].id == data.data[ii].id) {
-						userObjT.user[jj].login = data.data[ii].login;
-					}
-				}
+			userObjT.user = [];
+			for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
+				userObjT.user[dataUsersTwitch.data[ii].login] = { id: dataUsersTwitch.data[ii].id, viewers: "", live: "", title: "" };
 			}
 		},
 		complete: function() {
@@ -244,9 +276,19 @@ function GetStreamsHelix() {
 		type: "GET",
 		url: urlStreamsTwitch,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
-		success: function(data) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
+			//reset = data.getResponseHeader("Ratelimit-Remaining");
 			dataStreamsTwitch = data;
+			for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
+				for (jj = 0 ; jj < dataStreamsTwitch.data.length ; jj++) {
+					if (userObjT.user[dataUsersTwitch.data[ii].login].id == dataStreamsTwitch.data[jj].user_id) {
+						userObjT.user[dataUsersTwitch.data[ii].login].viewers = dataStreamsTwitch.data[jj].viewer_count;
+						userObjT.user[dataUsersTwitch.data[ii].login].live = dataStreamsTwitch.data[jj].type;
+						userObjT.user[dataUsersTwitch.data[ii].login].title = dataStreamsTwitch.data[jj].title;
+					}
+				}
+			}
 		},
 		complete: function() {
 			$.when(AfterGetsHelix()).done( function() {
@@ -259,26 +301,25 @@ function GetStreamsHelix() {
 }
 
 function AfterGetsHelix() {
-	for (ii = 0 ; ii < dataStreamsTwitch.data.length ; ii++) {
-		for (jj = 0 ; jj < dataFollowsTwitch.data.length ; jj++) {
-			if (userObjT.user[jj].id == dataStreamsTwitch.data[ii].user_id && dataStreamsTwitch.data[ii].type == "live" && userIndexTwitch < 20) {
-				rowT = document.createElement("div");
-				rowT.classList.add("row");
-				tableT.appendChild(rowT);
-				cellT = document.createElement("div");
-				cellT.classList.add("cell");
-				rowT.appendChild(cellT);
-				pT = document.createElement("p");
-				cellT.appendChild(pT);
-				spanT = document.createElement("span");
-				spanT.setAttribute("id", "helix" + userIndexTwitch); // set element ID
-				pT.appendChild(spanT);
-				spanT.innerHTML = userObjT.user[jj].login; // display names from twitch IDs
-				spanT.style.backgroundColor = "lightgreen"; // change background color of name
-				spanT.title = dataStreamsTwitch.data[ii].title;
-				spanT.onclick = function(event) { LoadChannel(event.target.innerHTML, "twitch"); }; // create links for fast channel changes
-				userIndexTwitch++;
-			}
+	for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
+		if (userObjT.user[dataUsersTwitch.data[ii].login].live == "live" && userIndexTwitch < 20) {
+			rowT = document.createElement("div");
+			rowT.classList.add("row");
+			tableT.appendChild(rowT);
+			cellT = document.createElement("div");
+			cellT.classList.add("cell");
+			rowT.appendChild(cellT);
+			pT = document.createElement("p");
+			cellT.appendChild(pT);
+			spanT = document.createElement("span");
+			spanT.setAttribute("id", "helix" + userIndexTwitch); // set element ID
+			pT.appendChild(spanT);
+			spanT.index = dataUsersTwitch.data[ii].login;
+			spanT.innerHTML = dataUsersTwitch.data[ii].login + " (" + userObjT.user[dataUsersTwitch.data[ii].login].viewers + " viewers)"; // display names from twitch IDs
+			//spanT.style.backgroundColor = "lightgreen"; // change background color of name
+			spanT.title = userObjT.user[dataUsersTwitch.data[ii].login].title;
+			spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); }; // create links for fast channel changes
+			userIndexTwitch++;
 		}
 	}
 }
@@ -292,7 +333,7 @@ function CreateFollowListMixer() {
 		type: "GET",
 		url: "https://mixer.com/api/v1/channels/" + g_userName,
 		headers: { "Client-ID": "07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6" },
-		success: function(data, textstatus, jqxhr) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
 			dataUserMixer = data;
 			GetFollowsMixer(true, false);
@@ -326,7 +367,7 @@ function GetFollowsMixer(init, destroy) {
 		type: "GET",
 		url: "https://mixer.com/api/v1/users/" + dataUserMixer.user.id + "/follows?limit=100&page=" + pageMixer,
 		headers: { "Client-ID": "07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6" },
-		success: function(data, textstatus, jqxhr) {
+		success: function(data, status, jqxhr) {
 			//console.log(data);
 			dataFollowsMixer = data;
 
@@ -352,10 +393,11 @@ function GetFollowsMixer(init, destroy) {
 					cellM.appendChild(pM);
 					spanM = document.createElement("span");
 					pM.appendChild(spanM);
-					spanM.innerHTML = dataFollowsMixer[ii].token; // display names from mixer IDs
-					spanM.style.backgroundColor = "lightgreen"; // change background color of name
+					spanM.index = dataFollowsMixer[ii].token;
+					spanM.innerHTML = dataFollowsMixer[ii].token + " (" + dataFollowsMixer[ii].viewersCurrent + " viewers)"; // display names from mixer IDs
+					//spanM.style.backgroundColor = "lightgreen"; // change background color of name
 					spanM.title = dataFollowsMixer[ii].name;
-					spanM.onclick = function(event) { LoadChannel(event.target.innerHTML, "mixer"); }; // create links for fast channel changes
+					spanM.onclick = function(event) { LoadChannel(event.target.index, "mixer"); }; // create links for fast channel changes
 					userIndexMixer++;
 				}
 			}
@@ -371,6 +413,16 @@ function GetFollowsMixer(init, destroy) {
 function UpdateFollowListMixer() {
 	GetFollowsMixer(true, true);
 }
+
+/*
+function UpdateResetForm() {
+	if (reset) {
+		document.getElementById("reset-form").innerHTML = reset;
+	}
+}
+
+var x = setInterval(UpdateResetForm(), 1000);
+*/
 		</script>
 	</body>
 </html>
