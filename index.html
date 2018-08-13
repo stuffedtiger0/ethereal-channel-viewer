@@ -65,6 +65,7 @@ p              { margin: 0; }
 		</div>
 		<script>
 var g_userName;
+var isFirstId;
 var oldTableT, oldTableM;
 var countHelix, countMixer;
 var pageHelix, pageMixer;
@@ -155,16 +156,16 @@ function CreateFollowListHelix() {
 }
 
 function GetFollowsHelix(init, destroy) {
-	var isFirstId;
-
 	if (init) {
 		userIndexTwitch = 0;
 		hasCountTwitch = false;
 		pageHelix = "";
-		tableT = document.createElement("div");
-		tableT.classList.add("table");
-		tableT.setAttribute("id", "follow-table-helix");
-		document.getElementById("follows-helix").appendChild(tableT);
+		if (!destroy) {
+			tableT = document.createElement("div");
+			tableT.classList.add("table");
+			tableT.setAttribute("id", "follow-table-helix");
+			document.getElementById("follows-helix").appendChild(tableT);
+		}
 	}
 
 	if (destroy) {
@@ -222,7 +223,7 @@ function GetUsersHelix() {
 		url: urlUsersTwitch,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 			dataUsersTwitch = data;
 			for (ii = 0 ; ii < data.data.length ; ii++) {
 				for (jj = 0 ; jj < dataFollowsTwitch.data.length ; jj++) {
@@ -244,7 +245,7 @@ function GetStreamsHelix() {
 		url: urlStreamsTwitch,
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 			dataStreamsTwitch = data;
 		},
 		complete: function() {
@@ -304,10 +305,12 @@ function GetFollowsMixer(init, destroy) {
 		userIndexMixer = 0;
 		hasCountMixer = false;
 		pageMixer = 0;
-		tableM = document.createElement("div");
-		tableM.classList.add("table");
-		tableM.setAttribute("id", "follow-table-mixer");
-		document.getElementById("follows-mixer").appendChild(tableM);
+		if (!destroy) {
+			tableM = document.createElement("div");
+			tableM.classList.add("table");
+			tableM.setAttribute("id", "follow-table-mixer");
+			document.getElementById("follows-mixer").appendChild(tableM);
+		}
 	}
 
 	if (destroy) {
@@ -324,7 +327,7 @@ function GetFollowsMixer(init, destroy) {
 		url: "https://mixer.com/api/v1/users/" + dataUserMixer.user.id + "/follows?limit=100&page=" + pageMixer,
 		headers: { "Client-ID": "07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6" },
 		success: function(data, textstatus, jqxhr) {
-			console.log(data);
+			//console.log(data);
 			dataFollowsMixer = data;
 
 			if (!hasCountMixer) {
