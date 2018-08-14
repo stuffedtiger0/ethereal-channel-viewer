@@ -6,7 +6,7 @@
 		<title>Ethereal Channel Viewer</title>
 		<style>
 html                { height: 100%; }
-body                { height: 100%; margin: 0; background-color: #F1F1F1; color: #262626; font-family: Helvetica, Arial, sans-serif; }
+body                { height: 100%; margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
 a                   { text-decoration: none; }
 p                   { margin: 0; }
 div.page-table      { display: table; height: 100%; }
@@ -17,9 +17,9 @@ div.cell            { display: table-cell; vertical-align: middle; }
 div.inline-table    { display: inline-table;  }
 div.inline-block    { display: inline-block; }
 .title              { font-weight: bold; }
-.input-text         { width: 150px; }
+.input-text         { width: 125px; }
 .input-button       { width: 150px; }
-#left-bar           { width: 250px; height: 720px; background-color: #262626; color: #F1F1F1; overflow-x: hidden; text-align: center }
+#left-bar           { width: 250px; height: 720px; overflow-x: hidden; text-align: center }
 #content            { text-align: center; }
 #follow-table-helix { width: 100%; }
 #follow-table-mixer { width: 100%; }
@@ -31,8 +31,9 @@ iframe              { display: block; }
 		<div class="page-table">
 <!-- PAGE CELL -->
 			<div class="page-cell">
+<!-- ALIGNMENT TABLE -->
 				<div class="table">
-	<!-- LEFT BAR -->
+<!-- LEFT BAR -->
 					<div class="cell" style="vertical-align: bottom;">
 						<div class="table" id="left-bar">
 							<div class="row">
@@ -50,48 +51,44 @@ iframe              { display: block; }
 							</div>
 						</div>
 					</div>
-	<!-- CONTENT -->
+<!-- CONTENT -->
 					<div class="cell">
 						<div class="table" id="content">
 							<div class="row">
 								<div class="cell">
 									<div class="inline-table">
-										<div class="row">
-											<div class="cell">
+										<div class="cell">
+											<fieldset>
+												<legend>Player Resolution</legend>
+												<input type="radio" name="reso" value="480p" onclick="ChangeResolution(event.target.value);" checked />480p<input type="radio" name="reso" value="720p" onclick="ChangeResolution(event.target.value);" />720p
+											</fieldset>
+										</div>
+										<div class="cell">
+											<fieldset>
+												<legend>User</legend>
 												<p class="title" id="current-user">No User Loaded</p>
-											</div>
-										</div>
-										<div class="row">
-											<div class="cell">
 												<input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value);" />
-											</div>
+											</fieldset>
 										</div>
-									</div>
-									<div class="inline-table">
-										<div class="row">
-											<div class="cell">
+										<div class="cell">
+											<fieldset>
+												<legend>Channel</legend>
 												<p class="title" id="current-channel">No Channel Loaded</p>
-											</div>
-										</div>
-										<div class="row">
-											<div class="cell">
-												<input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" />
-											</div>
-										</div>
-										<div class="row">
-											<div class="cell">
+												<input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" /><br />
 												<input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer');" />
-											</div>
+											</fieldset>
 										</div>
 									</div>
+								</div>
+								<div class="cell">
 								</div>
 							</div>
 							<div class="row">
-								<div class="cell">
-									<iframe id="frame-player" src="https://player.twitch.tv/?channel=" frameborder="0" allowfullscreen="true" scrolling="no" width="1280" height="720"></iframe>
+								<div class="cell" style="background-color: #F1F1F1; color: #262626;">
+									<iframe id="frame-player" src="about:blank" frameborder="0" allowfullscreen="true" scrolling="no" width="852" height="480"></iframe>
 								</div>
-								<div class="cell">
-									<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="720"></iframe>
+								<div class="cell" style="background-color: #F1F1F1;">
+									<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="480"></iframe>
 								</div>
 							</div>
 						</div>
@@ -114,32 +111,43 @@ var hasCountTwitch, hasCountMixer;
 var tableT, rowT, cellT, pT, spanT;
 var tableM, rowM, cellM, pM, spanM;
 var ii, jj;
-var error;
 //var reset;
 
 function AssignButtons() {
 	var element;
 	element = document.getElementById("input-channel-twitch");
 	element.addEventListener("keyup", function(event) {
-		//event.preventDefault();
+		event.preventDefault();
 		if (event.keyCode == 13) {
 			document.getElementById("button-channel-twitch").click();
 		}
-	}, {passive: true});
+	});
 	element = document.getElementById("input-channel-mixer");
 	element.addEventListener("keyup", function(event) {
-		//event.preventDefault();
+		event.preventDefault();
 		if (event.keyCode == 13) {
 			document.getElementById("button-channel-mixer").click();
 		}
-	}, {passive: true});
+	});
 	element = document.getElementById("input-user");
 	element.addEventListener("keyup", function(event) {
-		//event.preventDefault();
+		event.preventDefault();
 		if (event.keyCode == 13) {
 			document.getElementById("button-user").click();
 		}
-	}, {passive: true});
+	});
+}
+
+function ChangeResolution(newReso) {
+	if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
+		document.getElementById("frame-player").setAttribute("width", "1280");
+		document.getElementById("frame-player").setAttribute("height", "720");
+		document.getElementById("frame-chat").setAttribute("height", "720");
+	} else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
+		document.getElementById("frame-player").setAttribute("width", "852");
+		document.getElementById("frame-player").setAttribute("height", "480");
+		document.getElementById("frame-chat").setAttribute("height", "480");
+	}
 }
 
 function LoadChannel(channelName, service) {
