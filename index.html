@@ -19,7 +19,7 @@ div.inline-block    { display: inline-block; }
 .title              { font-weight: bold; }
 .input-text         { width: 125px; }
 .input-button       { width: 150px; }
-#left-bar           { width: 250px; height: 720px; overflow-x: hidden; text-align: center }
+#left-bar           { width: 250px; overflow-x: hidden; text-align: center }
 #content            { text-align: center; }
 #follow-table-helix { width: 100%; }
 #follow-table-mixer { width: 100%; }
@@ -34,7 +34,7 @@ iframe              { display: block; }
 <!-- ALIGNMENT TABLE -->
 				<div class="table">
 <!-- LEFT BAR -->
-					<div class="cell" style="vertical-align: bottom;">
+					<div class="cell">
 						<div class="table" id="left-bar">
 							<div class="row">
 								<div class="cell">
@@ -195,8 +195,9 @@ function CreateFollowListHelix() {
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data, status, jqxhr) {
 			//console.log(data);
-			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataUserTwitch = data;
+			//reset = parseInt(jqxhr.getResponseHeader("Ratelimit-Remaining"));
+			//alert(reset);
 		},
 		complete: function(jqxhr, status) {
 			if (status == "success") {
@@ -234,8 +235,8 @@ function GetFollowsHelix(init, destroy) {
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data, status, jqxhr) {
 			//console.log(data);
-			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataFollowsTwitch = data;
+			//reset = parseInt(jqxhr.getResponseHeader("Ratelimit-Remaining"));
 			if (!hasCountTwitch) {
 				countHelix = parseInt(dataFollowsTwitch.total);
 				countHelix -= dataFollowsTwitch.data.length;
@@ -273,8 +274,8 @@ function GetUsersHelix() {
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data, status, jqxhr) {
 			//console.log(data);
-			//reset = jqxhr.getResponseHeader("Ratelimit-Remaining");
 			dataUsersTwitch = data;
+			//reset = parseInt(jqxhr.getResponseHeader("Ratelimit-Remaining"));
 			userObjT.user = [];
 			for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
 				userObjT.user[dataUsersTwitch.data[ii].login] = { id: dataUsersTwitch.data[ii].id, viewers: "", live: "", title: "" };
@@ -295,8 +296,8 @@ function GetStreamsHelix() {
 		headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
 		success: function(data, status, jqxhr) {
 			//console.log(data);
-			//reset = data.getResponseHeader("Ratelimit-Remaining");
 			dataStreamsTwitch = data;
+			//reset = parseInt(jqxhr.getResponseHeader("Ratelimit-Remaining"));
 			for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
 				for (jj = 0 ; jj < dataStreamsTwitch.data.length ; jj++) {
 					if (userObjT.user[dataUsersTwitch.data[ii].login].id == dataStreamsTwitch.data[jj].user_id) {
@@ -439,15 +440,17 @@ function UpdateFollowListMixer() {
 	GetFollowsMixer(true, true);
 }
 
-/*
 function UpdateResetForm() {
 	if (reset) {
-		document.getElementById("reset-form").innerHTML = reset;
+		if (document.getElementById("reset-form").innerHTML !== reset) {
+			document.getElementById("reset-form").innerHTML = reset;
+		}
+	} else if (document.getElementById("reset-form").innerHTML != "broken") {
+		document.getElementById("reset-form").innerHTML = "broken";
 	}
 }
 
 var x = setInterval(UpdateResetForm(), 1000);
-*/
 		</script>
 	</body>
 </html>
