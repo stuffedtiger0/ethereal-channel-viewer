@@ -24,6 +24,8 @@ div.inline-block    { display: inline-block; }
 #follow-table-helix { width: 100%; }
 #follow-table-mixer { width: 100%; }
 iframe              { display: block; }
+table               { border-collapse: collapse; border: 0px solid red; }
+td                  { padding: 0px; }
 		</style>
 	</head>
 	<body onload="AssignButtons();">
@@ -53,45 +55,45 @@ iframe              { display: block; }
 					</div>
 <!-- CONTENT -->
 					<div class="cell">
-						<div class="table" id="content">
-							<div class="row">
-								<div class="cell">
-									<div class="inline-table">
-										<div class="cell">
-											<fieldset>
-												<legend>Player & Chat</legend>
-												<input type="radio" name="reso" value="480p" onclick="ChangeResolution(event.target.value);" checked />480p<input type="radio" name="reso" value="720p" onclick="ChangeResolution(event.target.value);" />720p
-											</fieldset>
-										</div>
-										<div class="cell">
-											<fieldset>
-												<legend>User</legend>
-												<p class="title" id="current-user">No User Loaded</p>
-												<input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value);" />
-											</fieldset>
-										</div>
-										<div class="cell">
-											<fieldset>
-												<legend>Channel</legend>
-												<p class="title" id="current-channel">No Channel Loaded</p>
-												<input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" /><br />
-												<input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer');" />
-											</fieldset>
-										</div>
-									</div>
-								</div>
-								<div class="cell">
-								</div>
-							</div>
-							<div class="row">
-								<div class="cell" style="background-color: #F1F1F1; color: #262626;">
-									<iframe id="frame-player" src="about:blank" frameborder="0" allowfullscreen="true" scrolling="no" width="852" height="480"></iframe>
-								</div>
-								<div class="cell" style="background-color: #F1F1F1;">
-									<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="480"></iframe>
-								</div>
-							</div>
-						</div>
+						<table id="content">
+							<tr>
+								<td colspan="2">
+									<table style="display: inline-table;">
+										<tr>
+											<td>
+												<fieldset>
+													<legend>Player & Chat</legend>
+													<input type="radio" name="reso" value="320p" onclick="ChangeResolution(event.target.value);" checked />320p<input type="radio" name="reso" value="480p" onclick="ChangeResolution(event.target.value);" />480p<input type="radio" name="reso" value="720p" onclick="ChangeResolution(event.target.value);" />720p
+												</fieldset>
+											</td>
+											<td>
+												<fieldset>
+													<legend>User</legend>
+													<p class="title" id="current-user">No User Loaded</p>
+													<input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value);" />
+												</fieldset>
+											</td>
+											<td>
+												<fieldset>
+													<legend>Channel</legend>
+													<p class="title" id="current-channel">No Channel Loaded</p>
+													<input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch');" /><br />
+													<input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer');" />
+												</fieldset>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td style="background-color: #F1F1F1; color: #262626;">
+									<iframe id="frame-player" src="about:blank" frameborder="0" allowfullscreen="true" scrolling="no" width="568" height="320"></iframe>
+								</td>
+								<td style="background-color: #F1F1F1;">
+									<iframe id="frame-chat" src="about:blank" frameborder="0" scrolling="no" width="340" height="320"></iframe>
+								</td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -147,6 +149,10 @@ function ChangeResolution(newReso) {
 		document.getElementById("frame-player").setAttribute("width", "852");
 		document.getElementById("frame-player").setAttribute("height", "480");
 		document.getElementById("frame-chat").setAttribute("height", "480");
+	} else if (newReso == "320p" && document.getElementById("frame-player").height != "320") {
+		document.getElementById("frame-player").setAttribute("width", "568");
+		document.getElementById("frame-player").setAttribute("height", "320");
+		document.getElementById("frame-chat").setAttribute("height", "320");
 	}
 }
 
