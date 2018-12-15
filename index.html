@@ -63,7 +63,7 @@ td                  { padding: 0px; }
 											<td>
 												<fieldset>
 													<legend>Player & Chat</legend>
-													<input type="radio" name="reso" value="320p" onclick="ChangeResolution(event.target.value);" checked />320p<input type="radio" name="reso" value="480p" onclick="ChangeResolution(event.target.value);" />480p<input type="radio" name="reso" value="720p" onclick="ChangeResolution(event.target.value);" />720p
+													<input type="radio" name="reso" value="360p" onclick="ChangeResolution(event.target.value);" checked />360p<input type="radio" name="reso" value="480p" onclick="ChangeResolution(event.target.value);" />480p<input type="radio" name="reso" value="720p" onclick="ChangeResolution(event.target.value);" />720p
 												</fieldset>
 											</td>
 											<td>
@@ -149,10 +149,10 @@ function ChangeResolution(newReso) {
 		document.getElementById("frame-player").setAttribute("width", "852");
 		document.getElementById("frame-player").setAttribute("height", "480");
 		document.getElementById("frame-chat").setAttribute("height", "480");
-	} else if (newReso == "320p" && document.getElementById("frame-player").height != "320") {
-		document.getElementById("frame-player").setAttribute("width", "568");
-		document.getElementById("frame-player").setAttribute("height", "320");
-		document.getElementById("frame-chat").setAttribute("height", "320");
+	} else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
+		document.getElementById("frame-player").setAttribute("width", "640");
+		document.getElementById("frame-player").setAttribute("height", "360");
+		document.getElementById("frame-chat").setAttribute("height", "360");
 	}
 }
 
