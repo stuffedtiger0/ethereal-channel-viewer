@@ -8,7 +8,6 @@
     <style>
 html                { height: 100%; }
 body                { height: 100%; margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
-a                   { text-decoration: none; cursor: pointer; }
 p                   { margin: 0; }
 div.page-table      { display: table; height: 100%; }
 div.page-cell       { display: table-cell; height: 100%; vertical-align: middle; }
@@ -20,6 +19,7 @@ div.inline-block    { display: inline-block; }
 .title              { font-weight: bold; }
 .input-text         { width: 125px; }
 .input-button       { width: 150px; }
+.spanlink           { cursor: pointer; }
 #left-bar           { width: 250px; overflow-x: hidden; text-align: center }
 #content            { text-align: center; }
 #follow-table-helix { width: 100%; }
@@ -30,8 +30,8 @@ td                  { padding: 0px; }
 
 .resoButton { background-color: #F1F1F1; color: #262626; padding: 10px; border: none; cursor: pointer; }
 .resodrop-content { display: none; position: absolute; background-color: #F1F1F1; color: #262626; min-width: 150px; overflow: hidden; z-index: 1; }
-.resodrop-content a { display: block; padding: 6px 0px; cursor: pointer; }
-.resodrop-content a:hover { background-color: #262626; color: #F1F1F1; }
+.resodrop-content span { display: block; padding: 6px 0px; cursor: pointer; }
+.resodrop-content span:hover { background-color: #262626; color: #F1F1F1; }
 .show { display: block; }
     </style>
 
@@ -53,9 +53,9 @@ td                  { padding: 0px; }
               </div>
               <div class="row">
                 <div class="cell">
-                  <p class="title"><span title="click to update" onclick="UpdateFollowListHelix()">[twitch]</span></p>
+                  <p class="title"><span class="spanlink" title="click to update twitch list" onclick="UpdateFollowListHelix()">[twitch]</span></p>
                   <div id="follows-helix"></div>
-                  <p class="title"><span title="click to update" onclick="UpdateFollowListMixer()">[mixer]</span></p>
+                  <p class="title"><span class="spanlink" title="click to update mixer list" onclick="UpdateFollowListMixer()">[mixer]</span></p>
                   <div id="follows-mixer"></div>
                 </div>
               </div>
@@ -72,9 +72,9 @@ td                  { padding: 0px; }
                         <div class="dropdown">
                           <button onclick="showResoDropdown()" class="resoButton">Player/Chat Dimensions</button>
                           <div id="resoDropdown" class="resodrop-content">
-                            <a onclick="ChangeResolution('360p')">360p</a>
-                            <a onclick="ChangeResolution('480p')">480p</a>
-                            <a onclick="ChangeResolution('720p')">720p</a>
+                            <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
+                            <span class="spanlink" onclick="ChangeResolution('480p')">480p</span>
+                            <span class="spanlink" onclick="ChangeResolution('720p')">720p</span>
                           </div>
                         </div>
                       </td>
@@ -355,6 +355,7 @@ function AfterGetsHelix() {
       pT = document.createElement("p");
       cellT.appendChild(pT);
       spanT = document.createElement("span");
+      spanT.classList.add("spanlink");
       spanT.setAttribute("id", "helix" + userIndexTwitch); // set element ID
       pT.appendChild(spanT);
       spanT.index = dataUsersTwitch.data[ii].login;
@@ -438,6 +439,7 @@ function GetFollowsMixer(init, destroy) {
           pM = document.createElement("p");
           cellM.appendChild(pM);
           spanM = document.createElement("span");
+          spanM.classList.add("spanlink");
           pM.appendChild(spanM);
           spanM.index = dataFollowsMixer[ii].token;
           spanM.innerHTML = dataFollowsMixer[ii].token + " (" + dataFollowsMixer[ii].viewersCurrent + " viewers)"; // display names from mixer IDs
