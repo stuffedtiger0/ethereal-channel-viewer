@@ -11,10 +11,10 @@ body                { height: 100%; margin: 0; background-color: #262626; color:
 p                   { margin: 0; }
 div.page-table      { display: table; height: 100%; }
 div.page-cell       { display: table-cell; height: 100%; vertical-align: middle; }
-div.table           { display: table; }
-div.row             { display: table-row; }
-div.cell            { display: table-cell; vertical-align: middle; }
-div.inline-table    { display: inline-table;  }
+div.divtable        { display: table; }
+div.divrow          { display: table-row; }
+div.divcell         { display: table-cell; vertical-align: middle; }
+div.inline-table    { display: inline-table; }
 div.inline-block    { display: inline-block; }
 .title              { font-weight: bold; }
 .input-text         { width: 125px; }
@@ -28,31 +28,34 @@ iframe              { display: block; }
 table               { border-collapse: collapse; border: 0px solid red; }
 td                  { padding: 0px; }
 
-.resoButton { background-color: #F1F1F1; color: #262626; padding: 10px; border: none; cursor: pointer; }
-.resodrop-content { display: none; position: absolute; background-color: #F1F1F1; color: #262626; min-width: 150px; overflow: hidden; z-index: 1; }
-.resodrop-content span { display: block; padding: 6px 0px; cursor: pointer; }
-.resodrop-content span:hover { background-color: #262626; color: #F1F1F1; }
+.selector-section-td         { width: 300px; }
+.selector-section-div        { width: inherit; text-align: center; }
+.select-button               { background-color: #F1F1F1; color: #262626; padding: 10px; border: 1px solid orange; cursor: pointer; }
+.dropdown-content            { display: none; position: absolute; width: inherit; background-color: #262626; color: #F1F1F1; overflow: hidden; z-index: 1; }
+.dropdown-content span       { display: block; padding: 6px 0px; cursor: pointer; }
+.dropdown-content span:hover { background-color: #F1F1F1; color: #262626; }
+
 .show { display: block; }
     </style>
 
   </head>
-  <body onload="AssignButtons();ChangeResolution('360p');">
+  <body onload="AssignButtons();ChangeResolution('init');">
 <!-- PAGE TABLE -->
     <div class="page-table">
 <!-- PAGE CELL -->
       <div class="page-cell">
 <!-- ALIGNMENT TABLE -->
-        <div class="table">
+        <div class="divtable">
 <!-- LEFT BAR -->
-          <div class="cell">
-            <div class="table" id="left-bar">
-              <div class="row">
-                <div class="cell">
+          <div class="divcell">
+            <div class="divtable" id="left-bar">
+              <div class="divrow">
+                <div class="divcell">
                   <p><span id="reset-form"></span></p>
                 </div>
               </div>
-              <div class="row">
-                <div class="cell">
+              <div class="divrow">
+                <div class="divcell">
                   <p class="title"><span class="spanlink" title="click to update twitch list" onclick="UpdateFollowListHelix()">[twitch]</span></p>
                   <div id="follows-helix"></div>
                   <p class="title"><span class="spanlink" title="click to update mixer list" onclick="UpdateFollowListMixer()">[mixer]</span></p>
@@ -62,36 +65,38 @@ td                  { padding: 0px; }
             </div>
           </div>
 <!-- CONTENT -->
-          <div class="cell">
+          <div class="divcell">
             <table id="content">
               <tr>
                 <td colspan="2">
                   <table style="display: inline-table;">
                     <tr>
-                      <td>
-                        <div class="dropdown">
-                          <button onclick="showResoDropdown()" class="resoButton">Player/Chat Dimensions</button>
-                          <div id="resoDropdown" class="resodrop-content">
+                      <td class="selector-section-td">
+                        <div class="selector-section-div">
+                          <button class="select-button" onclick="ToggleDropdown('resoDropdown')">Player/Chat Dimensions</button>
+                          <div class="dropdown-content" id="resoDropdown">
                             <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
                             <span class="spanlink" onclick="ChangeResolution('480p')">480p</span>
                             <span class="spanlink" onclick="ChangeResolution('720p')">720p</span>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <fieldset>
-                          <legend>User</legend>
-                          <p class="title" id="current-user">No User Loaded</p>
-                          <input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value)" />
-                        </fieldset>
+                      <td class="selector-section-td">
+                        <div class="selector-section-div">
+                          <button class="select-button" id="current-user" onclick="ToggleDropdown('userDropdown')">User</button>
+                          <div class="dropdown-content" id="userDropdown">
+                            <span><input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value)" /></span>
+                          </div>
+                        </div>
                       </td>
-                      <td>
-                        <fieldset>
-                          <legend>Channel</legend>
-                          <p class="title" id="current-channel">No Channel Loaded</p>
-                          <input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch')" /><br />
-                          <input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer')" />
-                        </fieldset>
+                      <td class="selector-section-td">
+                        <div class="selector-section-div">
+                          <button class="select-button" id="current-channel" onclick="ToggleDropdown('channelDropdown')">Channel</button>
+                          <div class="dropdown-content" id="channelDropdown">
+                            <span><input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch')" /></span>
+                            <span><input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer')" /></span>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   </table>
@@ -153,27 +158,56 @@ function AssignButtons() {
   });
 }
 
-function showResoDropdown() {
-  document.getElementById("resoDropdown").classList.toggle("show");
+function ToggleDropdown(selector) {
+  document.getElementById(selector).classList.toggle("show");
 }
 
 function ChangeResolution(newReso) {
-  if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
-    document.getElementById("frame-player").setAttribute("width", "1280");
-    document.getElementById("frame-player").setAttribute("height", "720");
-    document.getElementById("frame-chat").setAttribute("height", "720");
-  } else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
-    document.getElementById("frame-player").setAttribute("width", "852");
-    document.getElementById("frame-player").setAttribute("height", "480");
-    document.getElementById("frame-chat").setAttribute("height", "480");
-  } else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
-    document.getElementById("frame-player").setAttribute("width", "640");
-    document.getElementById("frame-player").setAttribute("height", "360");
-    document.getElementById("frame-chat").setAttribute("height", "360");
+  if (resoDropdown.classList.contains('show')) {
+    resoDropdown.classList.remove('show');
+  }
+  var date = new Date();
+  date.setTime(date.getTime()+(30*24*60*60*1000));
+  var expires = "; expires="+date.toGMTString();
+
+  if (newReso == "init") {
+    var cname = "reso=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var ii = 0 ; ii < ca.length ; ii++) {
+      var c = ca[ii];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(cname) == 0) {
+        return ChangeResolution(c.substring(cname.length, c.length));
+      }
+    }
+    return ChangeResolution("360p");
+  } else {
+    if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
+      document.getElementById("frame-player").setAttribute("width", "1280");
+      document.getElementById("frame-player").setAttribute("height", "720");
+      document.getElementById("frame-chat").setAttribute("height", "720");
+      document.cookie = "reso=720p" + expires + "; path=/";
+    } else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
+      document.getElementById("frame-player").setAttribute("width", "852");
+      document.getElementById("frame-player").setAttribute("height", "480");
+      document.getElementById("frame-chat").setAttribute("height", "480");
+      document.cookie = "reso=480p" + expires + "; path=/";
+    } else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
+      document.getElementById("frame-player").setAttribute("width", "640");
+      document.getElementById("frame-player").setAttribute("height", "360");
+      document.getElementById("frame-chat").setAttribute("height", "360");
+      document.cookie = "reso=360p" + expires + "; path=/";
+    }
   }
 }
 
 function LoadChannel(channelName, service) {
+  if (channelDropdown.classList.contains('show')) {
+    channelDropdown.classList.remove('show');
+  }
   if (channelName == "") {
     document.getElementById("current-channel").innerHTML = "No Channel Loaded";
     document.getElementById("frame-player").setAttribute("src", "about:blank");
@@ -193,6 +227,9 @@ function LoadChannel(channelName, service) {
 }
 
 function LoadUser(userName) {
+  if (userDropdown.classList.contains('show')) {
+    userDropdown.classList.remove('show');
+  }
   if (userName == "") {
     document.getElementById("current-user").innerHTML = "No User Loaded";
     oldTableT = document.getElementById("follow-table-helix");
@@ -237,7 +274,7 @@ function GetFollowsHelix(init, destroy) {
     pageHelix = "";
     if (!destroy) {
       tableT = document.createElement("div");
-      tableT.classList.add("table");
+      tableT.classList.add("divtable");
       tableT.setAttribute("id", "follow-table-helix");
       document.getElementById("follows-helix").appendChild(tableT);
     }
@@ -247,7 +284,7 @@ function GetFollowsHelix(init, destroy) {
     oldTableT = document.getElementById("follow-table-helix");
     if (oldTableT) oldTableT.parentNode.removeChild(oldTableT);
     tableT = document.createElement("div");
-    tableT.classList.add("table");
+    tableT.classList.add("divtable");
     tableT.setAttribute("id", "follow-table-helix");
     document.getElementById("follows-helix").appendChild(tableT);
   }
@@ -347,10 +384,10 @@ function AfterGetsHelix() {
   for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
     if (userObjT.user[dataUsersTwitch.data[ii].login].live == "live" && userIndexTwitch < 20) {
       rowT = document.createElement("div");
-      rowT.classList.add("row");
+      rowT.classList.add("divrow");
       tableT.appendChild(rowT);
       cellT = document.createElement("div");
-      cellT.classList.add("cell");
+      cellT.classList.add("divcell");
       rowT.appendChild(cellT);
       pT = document.createElement("p");
       cellT.appendChild(pT);
@@ -395,7 +432,7 @@ function GetFollowsMixer(init, destroy) {
     pageMixer = 0;
     if (!destroy) {
       tableM = document.createElement("div");
-      tableM.classList.add("table");
+      tableM.classList.add("divtable");
       tableM.setAttribute("id", "follow-table-mixer");
       document.getElementById("follows-mixer").appendChild(tableM);
     }
@@ -405,7 +442,7 @@ function GetFollowsMixer(init, destroy) {
     oldTableM = document.getElementById("follow-table-mixer");
     if (oldTableM) oldTableM.parentNode.removeChild(oldTableM);
     tableM = document.createElement("div");
-    tableM.classList.add("table");
+    tableM.classList.add("divtable");
     tableM.setAttribute("id", "follow-table-mixer");
     document.getElementById("follows-mixer").appendChild(tableM);
   }
@@ -431,10 +468,10 @@ function GetFollowsMixer(init, destroy) {
       for (ii = 0 ; ii < dataFollowsMixer.length ; ii++) {
         if (dataFollowsMixer[ii].online == true) {
           rowM = document.createElement("div");
-          rowM.classList.add("row");
+          rowM.classList.add("divrow");
           tableM.appendChild(rowM);
           cellM = document.createElement("div");
-          cellM.classList.add("cell");
+          cellM.classList.add("divcell");
           rowM.appendChild(cellM);
           pM = document.createElement("p");
           cellM.appendChild(pM);
@@ -463,6 +500,8 @@ function UpdateFollowListMixer() {
   GetFollowsMixer(true, true);
 }
 
+
+/*
 window.onclick = function(event) {
   if (!event.target.matches('.resoButton')) {
     var resoDropdown = document.getElementById("resoDropdown");
@@ -471,6 +510,7 @@ window.onclick = function(event) {
     }
   }
 }
+*/
 
 /*
 function UpdateResetForm() {
