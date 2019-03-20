@@ -20,6 +20,7 @@ div.inline-block    { display: inline-block; }
 .input-text         { width: 125px; }
 .input-button       { width: 150px; }
 .spanlink           { cursor: pointer; }
+.loading            { display: none; }
 #left-bar           { width: 250px; overflow-x: hidden; text-align: center }
 #content            { text-align: center; }
 #follow-table-helix { width: 100%; }
@@ -57,9 +58,11 @@ td                  { padding: 0px; }
               <div class="divrow">
                 <div class="divcell">
                   <p class="title"><span class="spanlink" title="click to update twitch list" onclick="UpdateFollowListHelix()">[twitch]</span></p>
-                  <div id="follows-helix"></div>
+                  <p class="loading" id="loading-helix">LOADING...</p>
+                  <div class="loading" id="follows-helix"></div>
                   <p class="title"><span class="spanlink" title="click to update mixer list" onclick="UpdateFollowListMixer()">[mixer]</span></p>
-                  <div id="follows-mixer"></div>
+                  <p class="loading" id="loading-mixer">LOADING...</p>
+                  <div class="loading" id="follows-mixer"></div>
                 </div>
               </div>
             </div>
@@ -73,7 +76,7 @@ td                  { padding: 0px; }
                     <tr>
                       <td class="selector-section-td">
                         <div class="selector-section-div">
-                          <button class="select-button" onclick="ToggleDropdown('resoDropdown')">Player/Chat Dimensions</button>
+                          <button class="select-button" onclick="ToggleShow('resoDropdown')">Player/Chat Dimensions</button>
                           <div class="dropdown-content" id="resoDropdown">
                             <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
                             <span class="spanlink" onclick="ChangeResolution('480p')">480p</span>
@@ -83,7 +86,7 @@ td                  { padding: 0px; }
                       </td>
                       <td class="selector-section-td">
                         <div class="selector-section-div">
-                          <button class="select-button" id="current-user" onclick="ToggleDropdown('userDropdown')">User</button>
+                          <button class="select-button" id="current-user" onclick="ToggleShow('userDropdown')">User</button>
                           <div class="dropdown-content" id="userDropdown">
                             <span><input class="input-text" id="input-user" type="text" /><input class="input-button" id="button-user" type="button" value="Load User" onclick="LoadUser(document.getElementById('input-user').value)" /></span>
                           </div>
@@ -91,7 +94,7 @@ td                  { padding: 0px; }
                       </td>
                       <td class="selector-section-td">
                         <div class="selector-section-div">
-                          <button class="select-button" id="current-channel" onclick="ToggleDropdown('channelDropdown')">Channel</button>
+                          <button class="select-button" id="current-channel" onclick="ToggleShow('channelDropdown')">Channel</button>
                           <div class="dropdown-content" id="channelDropdown">
                             <span><input class="input-text" id="input-channel-twitch" type="text" /><input class="input-button" id="button-channel-twitch" type="button" value="Load Twitch Channel" onclick="LoadChannel(document.getElementById('input-channel-twitch').value, 'twitch')" /></span>
                             <span><input class="input-text" id="input-channel-mixer" type="text" /><input class="input-button" id="button-channel-mixer" type="button" value="Load Mixer Channel" onclick="LoadChannel(document.getElementById('input-channel-mixer').value, 'mixer')" /></span>
@@ -158,8 +161,8 @@ function AssignButtons() {
   });
 }
 
-function ToggleDropdown(selector) {
-  document.getElementById(selector).classList.toggle("show");
+function ToggleShow(selector) {
+  return document.getElementById(selector).classList.toggle("show");
 }
 
 function ChangeResolution(newReso) {
@@ -205,8 +208,8 @@ function ChangeResolution(newReso) {
 }
 
 function LoadChannel(channelName, service) {
-  if (channelDropdown.classList.contains('show')) {
-    channelDropdown.classList.remove('show');
+  if (channelDropdown.classList.contains("show")) {
+    channelDropdown.classList.remove("show");
   }
   if (channelName == "") {
     document.getElementById("current-channel").innerHTML = "No Channel Loaded";
@@ -227,8 +230,8 @@ function LoadChannel(channelName, service) {
 }
 
 function LoadUser(userName) {
-  if (userDropdown.classList.contains('show')) {
-    userDropdown.classList.remove('show');
+  if (userDropdown.classList.contains("show")) {
+    userDropdown.classList.remove("show");
   }
   if (userName == "") {
     document.getElementById("current-user").innerHTML = "No User Loaded";
@@ -243,12 +246,12 @@ function LoadUser(userName) {
     oldTableM = document.getElementById("follow-table-mixer");
     if (oldTableM) oldTableM.parentNode.removeChild(oldTableM);
     g_userName = userName;
-    CreateFollowListHelix();
-    CreateFollowListMixer();
+    StepOneHelix();
+    StepOneMixer();
   }
 }
 
-function CreateFollowListHelix() {
+function StepOneHelix() {
   $.ajax({
     type: "GET",
     url: "https://api.twitch.tv/helix/users?login=" + g_userName,
@@ -261,13 +264,13 @@ function CreateFollowListHelix() {
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        GetFollowsHelix(true, false);
+        StepTwoHelix(true, false, false);
       }
     }
   });
 }
 
-function GetFollowsHelix(init, destroy) {
+function StepTwoHelix(init, destroy, update) {
   if (init) {
     userIndexTwitch = 0;
     hasCountTwitch = false;
@@ -278,6 +281,9 @@ function GetFollowsHelix(init, destroy) {
       tableT.setAttribute("id", "follow-table-helix");
       document.getElementById("follows-helix").appendChild(tableT);
     }
+    if (!update) {
+      ToggleShow("loading-helix");
+    }
   }
 
   if (destroy) {
@@ -287,6 +293,11 @@ function GetFollowsHelix(init, destroy) {
     tableT.classList.add("divtable");
     tableT.setAttribute("id", "follow-table-helix");
     document.getElementById("follows-helix").appendChild(tableT);
+  }
+
+  if (update) {
+    ToggleShow("loading-helix");
+    ToggleShow("follows-helix");
   }
 
   $.ajax({
@@ -321,13 +332,16 @@ function GetFollowsHelix(init, destroy) {
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        return GetUsersHelix();
+        return StepThreeHelix();
+      } else {
+        ToggleShow("loading-helix");
+        ToggleShow("follows-helix");
       }
     }
   });
 }
 
-function GetUsersHelix() {
+function StepThreeHelix() {
   $.ajax({
     type: "GET",
     url: urlUsersTwitch,
@@ -343,13 +357,16 @@ function GetUsersHelix() {
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        return GetStreamsHelix();
+        return StepFourHelix();
+      } else {
+        ToggleShow("loading-helix");
+        ToggleShow("follows-helix");
       }
     }
   });
 }
 
-function GetStreamsHelix() {
+function StepFourHelix() {
   $.ajax({
     type: "GET",
     url: urlStreamsTwitch,
@@ -370,17 +387,16 @@ function GetStreamsHelix() {
     },
     complete: function(jqxhr, status) {
       if (status == "success" ) {
-        $.when(AfterGetsHelix()).done( function() {
-          if (countHelix > 0 && userIndexTwitch < 20) {
-            return GetFollowsHelix(false, false);
-          }
-        });
+        return StepFiveHelix();
+      } else {
+        ToggleShow("loading-helix");
+        ToggleShow("follows-helix");
       }
     }
   });
 }
 
-function AfterGetsHelix() {
+function StepFiveHelix() {
   for (ii = 0 ; ii < dataUsersTwitch.data.length ; ii++) {
     if (userObjT.user[dataUsersTwitch.data[ii].login].live == "live" && userIndexTwitch < 20) {
       rowT = document.createElement("div");
@@ -402,13 +418,19 @@ function AfterGetsHelix() {
       userIndexTwitch++;
     }
   }
+  if (countHelix > 0 && userIndexTwitch < 20) {
+    return StepTwoHelix(false, false, false);
+  } else {
+    ToggleShow("loading-helix");
+    ToggleShow("follows-helix");
+  }
 }
 
 function UpdateFollowListHelix() {
-  return GetFollowsHelix(true, true);
+  return StepTwoHelix(true, true, true);
 }
 
-function CreateFollowListMixer() {
+function StepOneMixer() {
   $.ajax({
     type: "GET",
     url: "https://mixer.com/api/v1/channels/" + g_userName,
@@ -419,13 +441,13 @@ function CreateFollowListMixer() {
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        GetFollowsMixer(true, false);
+        StepTwoMixer(true, false, false);
       }
     }
   });
 }
 
-function GetFollowsMixer(init, destroy) {
+function StepTwoMixer(init, destroy, update) {
   if (init) {
     userIndexMixer = 0;
     hasCountMixer = false;
@@ -436,6 +458,9 @@ function GetFollowsMixer(init, destroy) {
       tableM.setAttribute("id", "follow-table-mixer");
       document.getElementById("follows-mixer").appendChild(tableM);
     }
+    if (!update) {
+      ToggleShow("loading-mixer");
+    }
   }
 
   if (destroy) {
@@ -445,6 +470,11 @@ function GetFollowsMixer(init, destroy) {
     tableM.classList.add("divtable");
     tableM.setAttribute("id", "follow-table-mixer");
     document.getElementById("follows-mixer").appendChild(tableM);
+  }
+
+  if (update) {
+    ToggleShow("loading-mixer");
+    ToggleShow("follows-mixer");
   }
 
   $.ajax({
@@ -489,15 +519,21 @@ function GetFollowsMixer(init, destroy) {
     complete: function(jqxhr, status) {
       if (status == "success") {
         if (countMixer > 0 && userIndexMixer < 20) {
-          return GetFollowsMixer(false, false);
+          return StepTwoMixer(false, false, false);
+        } else {
+          ToggleShow("loading-mixer");
+          ToggleShow("follows-mixer");
         }
+      } else {
+        ToggleShow("loading-mixer");
+        ToggleShow("follows-mixer");
       }
     }
   });
 }
 
 function UpdateFollowListMixer() {
-  GetFollowsMixer(true, true);
+  StepTwoMixer(true, true, true);
 }
 
 
