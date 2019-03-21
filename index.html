@@ -241,7 +241,8 @@ function LoadUser(userName) {
     if (oldTableM) oldTableM.parentNode.removeChild(oldTableM);
     g_userName = userName;
 
-    return StepOneHelix();
+    StepOneHelix();
+    StepOneMixer();
   }
 }
 
@@ -259,8 +260,6 @@ function StepOneHelix() {
     complete: function(jqxhr, status) {
       if (status == "success") {
         return StepTwoHelix(true, false, false);
-      } else {
-        return StepOneMixer();
       }
     }
   });
@@ -290,7 +289,6 @@ function StepTwoHelix(init, destroy, update) {
 
   document.getElementById("follows-helix").style.display = "none";
   document.getElementById("loading-helix").style.display = "block";
-
 
   $.ajax({
     type: "GET",
@@ -328,7 +326,6 @@ function StepTwoHelix(init, destroy, update) {
       } else {
         document.getElementById("loading-helix").style.display = "none";
         document.getElementById("follows-helix").style.display = "block";
-        return StepOneMixer();
       }
     }
   });
@@ -354,7 +351,6 @@ function StepThreeHelix() {
       } else {
         document.getElementById("loading-helix").style.display = "none";
         document.getElementById("follows-helix").style.display = "block";
-        return StepOneMixer();
       }
     }
   });
@@ -385,7 +381,6 @@ function StepFourHelix() {
       } else {
         document.getElementById("loading-helix").style.display = "none";
         document.getElementById("follows-helix").style.display = "block";
-        return StepOneMixer();
       }
     }
   });
@@ -418,7 +413,6 @@ function StepFiveHelix() {
   } else {
     document.getElementById("loading-helix").style.display = "none";
     document.getElementById("follows-helix").style.display = "block";
-    return StepOneMixer();
   }
 }
 
