@@ -92,7 +92,7 @@ function LoadChannel(channelName, service) {
       document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat");
       document.getElementById("frame-chat").setAttribute("width", "340");
     } else {
-      document.getElementById("frame-player").setAttribute("src", "https://mixer.com/embed/player/"+channelName+"&muted=false");
+      document.getElementById("frame-player").setAttribute("src", "https://mixer.com/embed/player/"+channelName+"?muted=false");
       document.getElementById("frame-chat").setAttribute("src", "https://mixer.com/embed/chat/"+channelName);
       document.getElementById("frame-chat").setAttribute("width", "350");
     }
