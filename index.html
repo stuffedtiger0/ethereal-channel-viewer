@@ -7,28 +7,25 @@
     <script src="load.js"></script>
 
     <style>
-body   { margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
-p      { margin: 0; }
-iframe { display: block; border: none; }
-table  { border-collapse: collapse; border: 0px solid red; }
-td     { padding: 0px; }
+body   { margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; text-align: center; }
+iframe { border: none; display: block; }
 
 .title      { font-weight: bold; }
-.text-input { width: 202px; }
 .spanlink   { cursor: pointer; }
 .loading    { display: none; }
 
-#page               { display: flex; align-items: center; justify-content: flex-start; height: 100vh; text-align: center; }
+#page               { display: flex; align-items: center; height: 100vh; }
+#page-top           { position: fixed; top: 0; left: 0; right: 0; margin: 0 auto; z-index: 1; }
 #page-left          { width: 250px; min-width: 250px; overflow: hidden; }
-#follow-table-helix { display: flex; flex-direction: column; flex: 0 100%; align-items: center; justify-content: center; }
-#follow-table-mixer { display: flex; flex-direction: column; flex: 0 100%; align-items: center; justify-content: center; }
+#page-right         { display: flex; background-color: #F1F1F1; overflow: hidden; }
+#follow-table-helix { display: flex; flex-direction: column; justify-content: center; }
+#follow-table-mixer { display: flex; flex-direction: column; justify-content: center; }
 
-.selector-section-td         { width: 300px; }
-.selector-section-div        { width: inherit; text-align: center; }
-.select-button               { background-color: #F1F1F1; color: #262626; padding: 10px; border: 0px solid black; cursor: pointer; }
-.dropdown-content            { display: none; position: absolute; width: inherit; background-color: #262626; color: #F1F1F1; overflow: hidden; z-index: 1; }
-.dropdown-content span       { display: block; padding: 6px 0px; cursor: pointer; }
-.dropdown-content span:hover { background-color: #F1F1F1; color: #262626; }
+.selector-section-div        { display: inline-block; width: 260px; }
+.select-button               { background-color: #F1F1F1; color: #262626; padding: 10px; border: 1px solid black; cursor: pointer; }
+.dropdown-content            { display: none; position: absolute; width: inherit; background-color: black; color: #F1F1F1; overflow: hidden; z-index: 1; }
+.dropdown-content span       { display: block; padding: 6px 0px; }
+.dropdown-content span:hover { background-color: white; color: #262626; }
 
 .show { display: block; }
     </style>
@@ -37,6 +34,30 @@ td     { padding: 0px; }
   <body onload="AssignButtons();ChangeResolution('init');">
 <!-- PAGE -->
     <div id="page">
+<!-- PAGE TOP -->
+      <div id="page-top">
+        <div class="selector-section-div">
+          <button class="select-button" onclick="ToggleDisplay('resoDropdown')">Video Player Size</button>
+          <div class="dropdown-content" id="resoDropdown">
+            <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
+            <span class="spanlink" onclick="ChangeResolution('480p')">480p</span>
+            <span class="spanlink" onclick="ChangeResolution('720p')">720p</span>
+          </div>
+        </div>
+        <div class="selector-section-div">
+          <button class="select-button" id="current-user" onclick="ToggleDisplay('userDropdown')">User</button>
+          <div class="dropdown-content" id="userDropdown">
+            <span><input id="input-user" style="width: 202px;" type="text" placeholder="Type a username and press Enter" /></span>
+          </div>
+        </div>
+        <div class="selector-section-div">
+          <button class="select-button" id="current-channel" onclick="ToggleDisplay('channelDropdown')">Channel</button>
+          <div class="dropdown-content" id="channelDropdown">
+            <span><input id="input-channel-twitch" style="width: 252px;" type="text" placeholder="Type twitch channel name and press Enter" /></span>
+            <span><input id="input-channel-mixer" style="width: 252px;" type="text" placeholder="Type mixer channel name and press Enter" /></span>
+          </div>
+        </div>
+      </div>
 <!-- PAGE LEFT -->
       <div id="page-left">
         <p class="title"><span class="spanlink" title="click to update twitch list" onclick="UpdateFollowListHelix()">[twitch]</span></p>
@@ -47,52 +68,13 @@ td     { padding: 0px; }
         <div id="follows-mixer"></div>
       </div>
 <!-- PAGE RIGHT -->
-      <div>
-        <table>
-          <tr>
-            <td colspan="2">
-              <table style="display: inline-table;">
-                <tr>
-                  <td class="selector-section-td">
-                    <div class="selector-section-div">
-                      <button class="select-button" onclick="ToggleDisplay('resoDropdown')">Video Player Size</button>
-                      <div class="dropdown-content" id="resoDropdown">
-                        <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
-                        <span class="spanlink" onclick="ChangeResolution('480p')">480p</span>
-                        <span class="spanlink" onclick="ChangeResolution('720p')">720p</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="selector-section-td">
-                    <div class="selector-section-div">
-                      <button class="select-button" id="current-user" onclick="ToggleDisplay('userDropdown')">User</button>
-                      <div class="dropdown-content" id="userDropdown">
-                        <span><input id="input-user" style="width: 202px;" type="text" placeholder="Type a username and press Enter" /></span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="selector-section-td">
-                    <div class="selector-section-div">
-                      <button class="select-button" id="current-channel" onclick="ToggleDisplay('channelDropdown')">Channel</button>
-                      <div class="dropdown-content" id="channelDropdown">
-                        <span><input id="input-channel-twitch" style="width: 252px;" type="text" placeholder="Type twitch channel name and press Enter" /></span>
-                        <span><input id="input-channel-mixer" style="width: 252px;" type="text" placeholder="Type mixer channel name and press Enter" /></span>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: #F1F1F1; color: #262626;">
-              <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
-            </td>
-            <td style="background-color: #F1F1F1;">
-              <iframe id="frame-chat" src="about:blank" width="340" height="9"></iframe>
-            </td>
-          </tr>
-        </table>
+      <div id="page-right">
+        <div>
+          <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
+        </div>
+        <div>
+          <iframe id="frame-chat" src="about:blank" width="340" height="9"></iframe>
+        </div>
       </div>
     </div>
   </body>
