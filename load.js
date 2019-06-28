@@ -12,6 +12,30 @@ function ToggleDisplay(selector) {
   return document.getElementById(selector).classList.toggle("show");
 }
 
+function AddListeners() {
+  var input = document.getElementById("input-user");
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      LoadUser();
+    }
+  });
+  input = document.getElementById("input-channel-twitch");
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      LoadChannel(document.getElementById("input-channel-twitch").value, "twitch");
+    }
+  });
+  input = document.getElementById("input-channel-mixer");
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      LoadChannel(document.getElementById("input-channel-mixer").value, "mixer");
+    }
+  });
+}
+
 function ChangeResolution(newReso) {
   if (resoDropdown.classList.contains('show')) resoDropdown.classList.remove('show');
   var date = new Date();
