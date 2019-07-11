@@ -54,7 +54,7 @@ function AddListeners() {
 }
 
 function ChangeResolution(newReso) {
-  if (resoDropdown.classList.contains('show')) resoDropdown.classList.remove('show');
+  if (resoDropdown.classList.contains("show")) RemoveDisplay();
   var date = new Date();
   date.setTime(date.getTime()+(30*24*60*60*1000));
   var expires = "; expires="+date.toGMTString();
@@ -93,7 +93,7 @@ function ChangeResolution(newReso) {
 }
 
 function LoadChannel(channelName, service) {
-  if (channelDropdown.classList.contains("show")) channelDropdown.classList.remove("show");
+  if (channelDropdown.classList.contains("show")) RemoveDisplay();
   if (channelName == "") {
     document.getElementById("current-channel").innerHTML = "No Channel Loaded";
     document.getElementById("frame-player").setAttribute("src", "about:blank");
@@ -113,7 +113,7 @@ function LoadChannel(channelName, service) {
 }
 
 function LoadUser() {
-  if (userDropdown.classList.contains("show")) userDropdown.classList.remove("show");
+  if (userDropdown.classList.contains("show")) RemoveDisplay();
   var userName = document.getElementById("input-user").value;
   var oldTable = document.getElementById("follow-table-helix");
   if (oldTable) oldTable.parentNode.removeChild(oldTable);
