@@ -1,22 +1,23 @@
 var g_userName;
-var hasCountTwitch, hasCountMixer;
-var countHelix, countMixer;
-var pageHelix, pageMixer;
-var hasUserDataTwitch = false;
-var hasUserDataMixer = false;
-var userIndexTwitch, userIndexMixer;
-var urlStreamsTwitch;
-var dataUserTwitch, dataUserMixer;
-var overlayIndex = 0;
+var g_hasCountTwitch, g_hasCountMixer;
+var g_countHelix, g_countMixer;
+var g_pageHelix, g_pageMixer;
+var g_hasFirstInTableTwitch, g_hasFirstInTableMixer;
+var g_hasUserDataTwitch = false;
+var g_hasUserDataMixer = false;
+var g_urlStreamsTwitch;
+var g_dataUserTwitch, g_dataFollowsTwitch;
+var g_dataUserMixer;
+var g_overlayIndex = 0;
 
 function ToggleDisplay(selector) {
   if (document.getElementById(selector).classList.toggle("show")) {
     document.getElementById("overlay-div").classList.add("overlayon");
-    overlayIndex++;
+    g_overlayIndex++;
   } else {
-    overlayIndex--;
+    g_overlayIndex--;
   }
-  if (overlayIndex == 0) {
+  if (g_overlayIndex == 0) {
     document.getElementById("overlay-div").classList.remove("overlayon");
   }
 }
@@ -26,7 +27,7 @@ function RemoveDisplay() {
   document.getElementById("userDropdown").classList.remove("show");
   document.getElementById("channelDropdown").classList.remove("show");
   document.getElementById("overlay-div").classList.remove("overlayon");
-  overlayIndex = 0;
+  g_overlayIndex = 0;
 }
 
 function AddListeners() {
@@ -129,20 +130,20 @@ function LoadUser() {
   }
 }
 
-function StepOneHelix() {
+async function StepOneHelix() {
   $.ajax({
     type: "GET",
     url: "https://api.twitch.tv/helix/users?login=" + g_userName,
     headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      dataUserTwitch = data;
-      hasUserDataTwitch = true;
+      g_dataUserTwitch = data;
+      g_hasUserDataTwitch = true;
     },
     complete: function(jqxhr, status) {
-      if (!dataUserTwitch.data[0]) {
+      if (!g_dataUserTwitch.data[0]) {
         document.getElementById("invalid-username-helix").classList.add("show");
-        hasUserDataTwitch = false;
+        g_hasUserDataTwitch = false;
       } else if (status == "success") {
         document.getElementById("invalid-username-helix").classList.remove("show");
         return StepTwoHelix(true, false);
@@ -153,9 +154,9 @@ function StepOneHelix() {
 
 function StepTwoHelix(init, destroy) {
   if (init) {
-    userIndexTwitch = 0;
-    hasCountTwitch = false;
-    pageHelix = "";
+    g_hasCountTwitch = false;
+    g_pageHelix = "";
+    g_hasFirstInTableTwitch = false;
     if (!destroy) {
       let tableT = document.createElement("div");
       tableT.setAttribute("id", "follow-table-helix");
@@ -173,28 +174,30 @@ function StepTwoHelix(init, destroy) {
   document.getElementById("loading-helix").classList.add("show");
   $.ajax({
     type: "GET",
-    url: "https://api.twitch.tv/helix/users/follows?from_id=" + dataUserTwitch.data[0].id + "&first=100&after=" + pageHelix,
+    url: "https://api.twitch.tv/helix/users/follows?from_id=" + g_dataUserTwitch.data[0].id + "&first=100&after=" + g_pageHelix,
     headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      if (!hasCountTwitch) {
-        countHelix = parseInt(data.total);
-        countHelix -= data.data.length;
-        hasCountTwitch = true;
+      g_dataFollowsTwitch = data;
+      if (!g_hasCountTwitch) {
+        g_countHelix = parseInt(data.total);
+        g_countHelix -= parseInt(data.data.length);
+        g_hasCountTwitch = true;
       } else {
-        countHelix -= data.data.length;
+        g_countHelix -= parseInt(data.data.length);
       }
-      pageHelix = data.pagination.cursor;
+      g_pageHelix = data.pagination.cursor;
       let isFirstId = true;
-      urlStreamsTwitch = "https://api.twitch.tv/helix/streams";
-      for (let ii = 0 ; ii < data.data.length ; ii++) {
-        if (isFirstId) { // with first id add ? instead of &
-          urlStreamsTwitch = urlStreamsTwitch + "?user_id=" + data.data[ii].to_id;
+      g_urlStreamsTwitch = "https://api.twitch.tv/helix/streams";
+      for (let ii = 0 ; ii < parseInt(data.data.length) ; ii++) {
+        if (isFirstId) { // with first id add '?' instead of '&'
+          g_urlStreamsTwitch = g_urlStreamsTwitch + "?user_id=" + data.data[ii].to_id;
           isFirstId = false;
         } else {
-          urlStreamsTwitch = urlStreamsTwitch + "&user_id=" + data.data[ii].to_id;
+          g_urlStreamsTwitch = g_urlStreamsTwitch + "&user_id=" + data.data[ii].to_id;
         }
       }
+
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
@@ -210,33 +213,48 @@ function StepTwoHelix(init, destroy) {
 function StepThreeHelix() {
   $.ajax({
     type: "GET",
-    url: urlStreamsTwitch,
+    url: g_urlStreamsTwitch,
     headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      if (data.data.length > 0) {
-        var divT;
-        var spanT;
-        for (let ii = 0 ; ii < data.data.length ; ii++) {
-          if (data.data[ii].type == "live" && userIndexTwitch < 20) {
-            divT = document.createElement("div");
-            divT.classList.add("followtablediv");
+      var divT;
+      var spanT;
+      var isLiveTwitch;
+      for (let ii = 0 ; ii < parseInt(g_dataFollowsTwitch.data.length); ii++) {
+        divT = document.createElement("div");
+        divT.classList.add("follow-table-div");
+        spanT = document.createElement("span");
+        spanT.classList.add("spanlink");
+        spanT.index = g_dataFollowsTwitch.data[ii].to_name;
+        for (let jj = 0 ; jj < parseInt(data.data.length) ; jj++) {
+          if (data.data[jj].user_name === g_dataFollowsTwitch.data[ii].to_name && data.data[jj].type === "live") {
+            spanT.classList.add("live");
+            spanT.innerHTML = g_dataFollowsTwitch.data[ii].to_name + " (" + data.data[jj].viewer_count + " viewers)";
+            spanT.title = data.data[jj].title;
+            isLiveTwitch = true;
+            break;
+          } else {
+            spanT.innerHTML = g_dataFollowsTwitch.data[ii].to_name;
+            isLiveTwitch = false;
+          }
+        }
+        spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); };
+        divT.appendChild(spanT);
+        if (!g_hasFirstInTableTwitch) {
+          document.getElementById("follow-table-helix").appendChild(divT);
+          g_hasFirstInTableTwitch = true;
+        } else {
+          if (isLiveTwitch) {
+            document.getElementById("follow-table-helix").insertBefore(divT, document.getElementById("follow-table-helix").firstChild);
+          } else {
             document.getElementById("follow-table-helix").appendChild(divT);
-            spanT = document.createElement("span");
-            spanT.classList.add("spanlink");
-            spanT.index = data.data[ii].user_name;
-            spanT.innerHTML = data.data[ii].user_name + " (" + data.data[ii].viewer_count + " viewers)";
-            spanT.title = data.data[ii].title;
-            spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); };
-            divT.appendChild(spanT);
-            userIndexTwitch++;
           }
         }
       }
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        if (countHelix > 0 && userIndexTwitch < 20) {
+        if (g_countHelix > 0) {
           return StepTwoHelix(false, false);
         } else {
           document.getElementById("loading-helix").classList.remove("show");
@@ -251,18 +269,18 @@ function StepThreeHelix() {
 }
 
 function UpdateFollowListHelix() {
-  if (hasUserDataTwitch) return StepTwoHelix(true, true);
+  if (g_hasUserDataTwitch) return StepTwoHelix(true, true);
 }
 
-function StepOneMixer() {
+async function StepOneMixer() {
   $.ajax({
     type: "GET",
     url: "https://mixer.com/api/v1/channels/" + g_userName,
     headers: { "Client-ID": "07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      dataUserMixer = data;
-      hasUserDataMixer = true;
+      g_dataUserMixer = data;
+      g_hasUserDataMixer = true;
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
@@ -274,9 +292,9 @@ function StepOneMixer() {
 
 function StepTwoMixer(init, destroy) {
   if (init) {
-    userIndexMixer = 0;
-    hasCountMixer = false;
-    pageMixer = 0;
+    g_hasCountMixer = false;
+    g_pageMixer = 0;
+    g_hasFirstInTableMixer = false;
     if (!destroy) {
       let tableM = document.createElement("div");
       tableM.setAttribute("id", "follow-table-mixer");
@@ -294,40 +312,53 @@ function StepTwoMixer(init, destroy) {
   document.getElementById("loading-mixer").classList.add("show");
   $.ajax({
     type: "GET",
-    url: "https://mixer.com/api/v1/users/" + dataUserMixer.user.id + "/follows?limit=100&page=" + pageMixer,
+    url: "https://mixer.com/api/v1/users/" + g_dataUserMixer.user.id + "/follows?limit=100&page=" + g_pageMixer,
     headers: { "Client-ID": "07b3b0eaa709e93934f6720d6130f2aa0ec716a93c5033d6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      var dataFollowsMixer = data;
-      if (!hasCountMixer) {
-        countMixer = jqxhr.getResponseHeader("x-total-count");
-        countMixer -= dataFollowsMixer.length;
-        hasCountMixer = true;
+      if (!g_hasCountMixer) {
+        g_countMixer = jqxhr.getResponseHeader("x-total-count");
+        g_countMixer -= parseInt(data.length);
+        g_hasCountMixer = true;
       } else {
-        countMixer -= dataFollowsMixer.length;
+        g_countMixer -= parseInt(data.length);
       }
-      pageMixer++;
+      g_pageMixer++;
       var divM;
       var spanM;
-      for (let ii = 0 ; ii < dataFollowsMixer.length ; ii++) {
-        if (dataFollowsMixer[ii].online == true && userIndexMixer < 20) {
-          divM = document.createElement("div");
-          divM.classList.add("followtablediv");
+      var isLiveMixer;
+      for (let ii = 0 ; ii < parseInt(data.length) ; ii++) {
+        divM = document.createElement("div");
+        divM.classList.add("follow-table-div");
+        spanM = document.createElement("span");
+        spanM.classList.add("spanlink");
+        spanM.index = data[ii].user.username;
+        if (data[ii].online == true) {
+          spanM.classList.add("live");
+          spanM.innerHTML = data[ii].user.username + " (" + data[ii].viewersCurrent + " viewers)";
+          spanM.title = data[ii].name;
+          isLiveMixer = true;
+        } else {
+          spanM.innerHTML = data[ii].user.username
+           isLiveMixer = false;
+        }
+        spanM.onclick = function(event) { LoadChannel(event.target.index, "mixer"); };
+        divM.appendChild(spanM);
+        if (!g_hasFirstInTableMixer) {
           document.getElementById("follow-table-mixer").appendChild(divM);
-          spanM = document.createElement("span");
-          spanM.classList.add("spanlink");
-          spanM.index = dataFollowsMixer[ii].user.username;
-          spanM.innerHTML = dataFollowsMixer[ii].user.username + " (" + dataFollowsMixer[ii].viewersCurrent + " viewers)";
-          spanM.title = dataFollowsMixer[ii].name;
-          spanM.onclick = function(event) { LoadChannel(event.target.index, "mixer"); };
-          divM.appendChild(spanM);
-          userIndexMixer++;
+          g_hasFirstInTableMixer = true;
+        } else {
+          if (isLiveMixer) {
+            document.getElementById("follow-table-mixer").insertBefore(divM, document.getElementById("follow-table-mixer").firstChild);
+          } else {
+            document.getElementById("follow-table-mixer").appendChild(divM);
+          }
         }
       }
     },
     complete: function(jqxhr, status) {
       if (status == "success") {
-        if (countMixer > 0 && userIndexMixer < 20) {
+        if (g_countMixer > 0) {
           return StepTwoMixer(false, false);
         } else {
           document.getElementById("loading-mixer").classList.remove("show");
@@ -342,9 +373,10 @@ function StepTwoMixer(init, destroy) {
 }
 
 function UpdateFollowListMixer() {
-  if (hasUserDataMixer) return StepTwoMixer(true, true);
+  if (g_hasUserDataMixer) return StepTwoMixer(true, true);
 }
 
 function MakeMeFamous() {
   document.getElementById("button-contact").classList.toggle("highlight");
 }
+
