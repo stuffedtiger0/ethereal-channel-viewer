@@ -212,12 +212,9 @@ function StepThreeHelix() {
     headers: { "Client-ID": "88pfy9ckfkxt3mp678i4ar9b0tr2q6" },
     success: function(data, status, jqxhr) {
       //console.log(data);
-      var divT;
       var spanT;
       var isLiveTwitch;
       for (let ii = 0 ; ii < parseInt(g_dataFollowsTwitch.data.length); ii++) {
-        divT = document.createElement("div");
-        divT.classList.add("follow-table-div");
         spanT = document.createElement("span");
         spanT.classList.add("spanlink");
         spanT.index = g_dataFollowsTwitch.data[ii].to_name;
@@ -234,15 +231,14 @@ function StepThreeHelix() {
           }
         }
         spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); };
-        divT.appendChild(spanT);
         if (!g_hasFirstInTableTwitch) {
-          document.getElementById("follow-table-helix").appendChild(divT);
+          document.getElementById("follow-table-helix").appendChild(spanT);
           g_hasFirstInTableTwitch = true;
         } else {
           if (isLiveTwitch) {
-            document.getElementById("follow-table-helix").insertBefore(divT, document.getElementById("follow-table-helix").firstChild);
+            document.getElementById("follow-table-helix").insertBefore(spanT, document.getElementById("follow-table-helix").firstChild);
           } else {
-            document.getElementById("follow-table-helix").appendChild(divT);
+            document.getElementById("follow-table-helix").appendChild(spanT);
           }
         }
       }
@@ -319,12 +315,9 @@ function StepTwoMixer(init, destroy) {
         g_countMixer -= parseInt(data.length);
       }
       g_pageMixer++;
-      var divM;
       var spanM;
       var isLiveMixer;
       for (let ii = 0 ; ii < parseInt(data.length) ; ii++) {
-        divM = document.createElement("div");
-        divM.classList.add("follow-table-div");
         spanM = document.createElement("span");
         spanM.classList.add("spanlink");
         spanM.index = data[ii].user.username;
@@ -335,18 +328,17 @@ function StepTwoMixer(init, destroy) {
           isLiveMixer = true;
         } else {
           spanM.innerHTML = data[ii].user.username
-           isLiveMixer = false;
+          isLiveMixer = false;
         }
         spanM.onclick = function(event) { LoadChannel(event.target.index, "mixer"); };
-        divM.appendChild(spanM);
         if (!g_hasFirstInTableMixer) {
-          document.getElementById("follow-table-mixer").appendChild(divM);
+          document.getElementById("follow-table-mixer").appendChild(spanM);
           g_hasFirstInTableMixer = true;
         } else {
           if (isLiveMixer) {
-            document.getElementById("follow-table-mixer").insertBefore(divM, document.getElementById("follow-table-mixer").firstChild);
+            document.getElementById("follow-table-mixer").insertBefore(spanM, document.getElementById("follow-table-mixer").firstChild);
           } else {
-            document.getElementById("follow-table-mixer").appendChild(divM);
+            document.getElementById("follow-table-mixer").appendChild(spanM);
           }
         }
       }

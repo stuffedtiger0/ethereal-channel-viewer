@@ -12,17 +12,15 @@ button { background-color: silver; color: #262626; padding: 10px; border: 1px so
 iframe { border: none; display: block; }
 
 #page        { display: flex; align-items: center; width: 100vw; height: 100vh; }
-#page-top    { display: flex; position: fixed; top: 5px; left: 255px; z-index: 1; }
+#page-top    { display: flex; position: fixed; top: 5px; left: 255px; z-index: 2; }
 #page-left   { display: flex; flex-direction: column; width: 250px; min-width: 250px; height: 100%; }
-#page-right  { display: flex; background-color: #F1F1F1; }
+#page-right  { display: flex; background-color: #F1F1F1; z-index: 1; }
 
-#left-top    { width: 100%; height: 50%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; overflow-x: hidden; overflow-y: scroll; }
-#left-bottom { width: 100%; height: 50%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; overflow-x: hidden; overflow-y: scroll; }
+#left-top    { height: 50%; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; }
+#left-bottom { height: 50%; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; }
 
-#follows-helix      { width: 100%; }
-#follow-table-helix { display: flex; flex-direction: column; width: 100%; }
-#follows-mixer      { width: 100%; }
-#follow-table-mixer { display: flex; flex-direction: column; width: 100%; }
+#follow-table-helix { width: 250px; display: flex; flex-direction: column; align-items: center; }
+#follow-table-mixer { width: 250px; display: flex; flex-direction: column; align-items: center; }
 
 .title      { font-weight: bold; }
 .spanlink   { cursor: pointer; }
@@ -30,9 +28,8 @@ iframe { border: none; display: block; }
 .hide       { display: none; }
 .highlight  { color: #F1F1F1; }
 
-.follow-table-div            { width: 100%; text-align: center; }
 .dropdown-selector-div       { position: relative; }
-.dropdown-content            { display: none; position: absolute; min-width: 200px; background-color: black; color: #F1F1F1; text-align: center; overflow: hidden; z-index: 1; }
+.dropdown-content            { display: none; position: absolute; min-width: 200px; background-color: black; color: #F1F1F1; text-align: center; overflow: hidden; z-index: 2; }
 .dropdown-content span       { display: block; padding: 6px 0px; }
 .dropdown-content span:hover { background-color: white; color: #262626; }
 
