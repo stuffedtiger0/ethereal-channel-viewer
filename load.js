@@ -214,7 +214,9 @@ function StepThreeHelix() {
       //console.log(data);
       var spanT;
       var isLiveTwitch;
-      for (let ii = 0 ; ii < parseInt(g_dataFollowsTwitch.data.length); ii++) {
+      console.log(g_dataFollowsTwitch.data.length);
+      for (let ii = 0 ; ii < parseInt(g_dataFollowsTwitch.data.length) ; ii++) {
+        isLiveTwitch = false;
         spanT = document.createElement("span");
         spanT.classList.add("spanlink");
         spanT.index = g_dataFollowsTwitch.data[ii].to_name;
@@ -225,10 +227,10 @@ function StepThreeHelix() {
             spanT.title = data.data[jj].title;
             isLiveTwitch = true;
             break;
-          } else {
-            spanT.innerHTML = g_dataFollowsTwitch.data[ii].to_name;
-            isLiveTwitch = false;
           }
+        }
+        if (!isLiveTwitch) {
+          spanT.innerHTML = g_dataFollowsTwitch.data[ii].to_name;
         }
         spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); };
         if (!g_hasFirstInTableTwitch) {
