@@ -21,18 +21,18 @@ function ToggleDisplay(selector) {
 
 function RemoveDisplay() {
   document.getElementById("resoDropdown").classList.remove("show");
-  document.getElementById("userDropdown").classList.remove("show");
+  //document.getElementById("userDropdown").classList.remove("show");
   document.getElementById("channelDropdown").classList.remove("show");
 }
 
 function AddListeners() {
   var input = document.getElementById("input-user");
-  input.addEventListener("keyup", function(event) {
+  /*input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
       LoadUser();
     }
-  });
+  });*/
   input = document.getElementById("input-channel-twitch");
   input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
@@ -96,7 +96,7 @@ function LoadChannel(channelName, service) {
     }
   }
 }
-
+/*
 function LoadUser() {
   if (userDropdown.classList.contains("show")) RemoveDisplay();
   var userName = document.getElementById("input-user").value;
@@ -246,7 +246,7 @@ function StepThreeHelix() {
     }
   });
 }
-
+*/
 function UpdateFollowListHelix() {
   if (g_hasUserDataTwitch) return StepTwoHelix(true, true);
 }
