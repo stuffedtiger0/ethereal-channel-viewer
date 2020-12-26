@@ -1,14 +1,8 @@
-var g_userName;
-var g_hasCountTwitch, g_hasCountMixer;
-var g_countHelix, g_countMixer;
-var g_pageHelix, g_pageMixer;
-var g_hasFirstInTableTwitch, g_hasFirstInTableMixer;
-var g_hasUserDataTwitch = false;
-var g_hasUserDataMixer = false;
-var g_urlStreamsTwitch;
-var g_dataUserTwitch, g_dataFollowsTwitch;
-var g_dataUserMixer;
+var g_token, g_userName, g_hasCountTwitch, g_countHelix, g_pageHelix,
+  g_hasFirstInTableTwitch, g_urlStreamsTwitch, g_dataUserTwitch, g_dataFollowsTwitch;
 var g_overlayIndex = 0;
+var g_hasToken = false;
+var g_hasUserDataTwitch = false;
 
 function ToggleDisplay(selector) {
   if (document.getElementById(selector).classList.contains("show")) {
@@ -96,26 +90,60 @@ function LoadChannel(channelName, service) {
     }
   }
 }
-/*
+
 function LoadUser() {
   if (userDropdown.classList.contains("show")) RemoveDisplay();
   var userName = document.getElementById("input-user").value;
   var oldTable = document.getElementById("follow-table-helix");
   if (oldTable) oldTable.parentNode.removeChild(oldTable);
-  if (userName == "") {
-    document.getElementById("current-user").innerHTML = "No User Loaded";
-  } else {
+  if (g_hasToken === true && userName !== "") {
     document.getElementById("current-user").innerHTML = userName;
     g_userName = userName;
-    StepOneHelix();
+    return StepOneHelix();
+  } else {
+    document.getElementById("current-user").innerHTML = "No User Loaded";
   }
 }
 
-async function StepOneHelix() {
+function AuthenticateTwitch() {
+  $.ajax({
+    type: "GET",
+    url: "https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope="
+  })
+}
+
+function GetToken() {
+  if (document.location.hash !== "") {
+    let hash = document.location.hash.split("&");
+    for (let ii = 0 ; ii < hash.length ; ii++) {
+      if (hash[ii].indexOf("#access_token") === 0) {
+        g_token = hash[ii];
+        break;
+      }
+    }
+    hash = g_token.split("=");
+    let found = false;
+    for (let ii = 0 ; ii < hash.length ; ii++) {
+      if (found === false && hash[ii].indexOf("#access_token" === 0)) {
+        found = true;
+        continue;
+      }
+      if (found = true) {
+        g_token = hash[ii];
+        g_hasToken = true;
+      }
+    }
+  }
+}
+
+function StepOneHelix() {
   $.ajax({
     type: "GET",
     url: "https://api.twitch.tv/helix/users?login=" + g_userName,
-    headers: { "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg" },
+    headers: {
+      "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg",
+      "Authorization": "Bearer " + g_token
+    },
     success: function(data, status, jqxhr) {
       console.log(data);
       g_dataUserTwitch = data;
@@ -156,7 +184,10 @@ function StepTwoHelix(init, destroy) {
   $.ajax({
     type: "GET",
     url: "https://api.twitch.tv/helix/users/follows?from_id=" + g_dataUserTwitch.data[0].id + "&first=100&after=" + g_pageHelix,
-    headers: { "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg" },
+    headers: {
+      "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg",
+      "Authorization": "Bearer " + g_token
+    },
     success: function(data, status, jqxhr) {
       //console.log(data);
       g_dataFollowsTwitch = data;
@@ -195,7 +226,10 @@ function StepThreeHelix() {
   $.ajax({
     type: "GET",
     url: g_urlStreamsTwitch,
-    headers: { "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg" },
+    headers: {
+      "Client-ID": "k8nkd1h57i2l2a3mp4g46iwm2z15tg",
+      "Authorization": "Bearer " + g_token
+    },
     success: function(data, status, jqxhr) {
       //console.log(data);
       var spanT;
@@ -246,7 +280,7 @@ function StepThreeHelix() {
     }
   });
 }
-*/
+
 function UpdateFollowListHelix() {
   if (g_hasUserDataTwitch) return StepTwoHelix(true, true);
 }

@@ -32,20 +32,20 @@ iframe { border: none; display: inline; }
     </style>
 
   </head>
-  <body onload="ChangeResolution('init');AddListeners();">
+  <body onload="ChangeResolution('init');AddListeners();GetToken()">
 <!-- PAGE -->
     <div id="page">
 <!-- PAGE LEFT -->
-      <!--<div id="page-left">
+      <div id="page-left">
         <p class="title"><span class="spanlink" title="click to update follow list" onclick="UpdateFollowListHelix()">[twitch]</span></p>
         <p class="hide" id="invalid-username-helix">INVALID USERNAME</p>
         <p class="hide" id="loading-helix">LOADING...</p>
         <div class="hide" id="follows-helix"></div>
-      </div>-->
+      </div>
 <!-- PAGE RIGHT -->
       <div id="page-right">
-	  	<div id="right-top">
-		  <div class="dropdown-selector-div">
+	  	  <div id="right-top">
+		      <div class="dropdown-selector-div">
             <button onclick="ToggleDisplay('resoDropdown')">Video Player Size</button>
             <div class="dropdown-content" id="resoDropdown">
               <span class="spanlink" onclick="ChangeResolution('360p')">360p</span>
@@ -53,12 +53,12 @@ iframe { border: none; display: inline; }
               <span class="spanlink" onclick="ChangeResolution('720p')">720p</span>
             </div>
           </div><!--
-          --><!--<div class="dropdown-selector-div">
+          --><div class="dropdown-selector-div">
             <button id="current-user" onclick="ToggleDisplay('userDropdown')">User</button>
             <div class="dropdown-content" id="userDropdown">
               <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
             </div>
-          </div>--><!--
+          </div><!--
           --><div class="dropdown-selector-div">
             <button id="current-channel" onclick="ToggleDisplay('channelDropdown')">Channel</button>
             <div class="dropdown-content" id="channelDropdown">
@@ -66,13 +66,16 @@ iframe { border: none; display: inline; }
             </div>
           </div><!--
           --><div class="dropdown-selector-div">
+            <button id="button-authenticate" onclick="AuthenticateTwitch()">Authenticate</button>
+          </div><!--
+          --><div class="dropdown-selector-div">
             <button id="button-contact" onclick="MakeMeFamous()">Discord Contact: stuffedtiger#9803</button>
           </div>
-	    </div>
-		<div id="right-bottom">
-		  <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
-		  <iframe id="frame-chat" src="about:blank" width="340" height="9"></iframe>
-		</div>
+        </div>
+    		<div id="right-bottom">
+		      <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
+		      <iframe id="frame-chat" src="about:blank" width="340" height="9"></iframe>
+		    </div>
       </div>
     </div>
   </body>
