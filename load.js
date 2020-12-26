@@ -100,6 +100,8 @@ function LoadUser() {
     document.getElementById("current-user").innerHTML = userName;
     g_userName = userName;
     return StepOneHelix();
+  } else if (g_hasToken === false) {
+    alert("You need to authenticate to use the follow list feature.");
   } else {
     document.getElementById("current-user").innerHTML = "No User Loaded";
   }
