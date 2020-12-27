@@ -85,8 +85,12 @@ function LoadChannel(channelName, service) {
     document.getElementById("current-channel").innerHTML = channelName;
     if (service == "twitch") {
       document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
-      document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io");
       document.getElementById("frame-chat").setAttribute("width", "340");
+      if (document.getElementById("checkbox-darkchat") === true) {
+        document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
+      } else {
+        document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io");
+      }
     }
   }
 }
