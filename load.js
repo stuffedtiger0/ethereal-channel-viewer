@@ -59,17 +59,14 @@ function ChangeResolution(newReso) {
     if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
       document.getElementById("frame-player").setAttribute("width", "1280");
       document.getElementById("frame-player").setAttribute("height", "720");
-      document.getElementById("frame-chat").setAttribute("height", "720");
       document.cookie = "reso=720p" + expires + "; path=/";
     } else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
       document.getElementById("frame-player").setAttribute("width", "852");
       document.getElementById("frame-player").setAttribute("height", "480");
-      document.getElementById("frame-chat").setAttribute("height", "480");
       document.cookie = "reso=480p" + expires + "; path=/";
     } else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
       document.getElementById("frame-player").setAttribute("width", "640");
       document.getElementById("frame-player").setAttribute("height", "360");
-      document.getElementById("frame-chat").setAttribute("height", "360");
       document.cookie = "reso=360p" + expires + "; path=/";
     }
   }
@@ -85,7 +82,6 @@ function LoadChannel(channelName, service) {
     document.getElementById("current-channel").innerHTML = channelName;
     if (service == "twitch") {
       document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
-      document.getElementById("frame-chat").setAttribute("width", "340");
       if (document.getElementById("checkbox-darkchat").checked === true) {
         document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
       } else {
