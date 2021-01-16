@@ -131,6 +131,25 @@ function GetToken() {
   }
 }
 
+function GetDarkChatState() {
+  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked;
+}
+
+function SetDarkChatState() {
+  var cname = "darkchatstate="
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for (let ii = 0 ; ii < ca.length ; ii++) {
+    var c = ca[ii];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(cname) == 0) {
+      document.getElementById("checkbox-darkchat").checked = c.substring(cname.length, c.length);
+    }
+  }
+}
+
 function StepOneHelix() {
   $.ajax({
     type: "GET",
