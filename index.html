@@ -13,8 +13,9 @@ iframe { border: none; }
 
 #page        { display: flex; width: 100vw; height: 100vh; }
 #page-left   { display: flex; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; width: 250px; min-width: 250px; height: 100%; }
-#page-middle { display: flex; flex-direction: column; justify-content: flex-start; height: 100%; z-index: 1; }
-#page-right  { position: absolute; right: 0; width: 340px; height: 100%; overflow: hidden; }
+#page-middle { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; height: 100%; z-index: 1; }
+#page-right  { position: absolute; right: 0; width: 340px; min-width: 340px; height: 100%; overflow: hidden; }
+#float-chat  { width: 340px; min-width: 340px; float: right; }
 
 #follow-table-helix { width: 100vw; display: flex; flex-direction: column; align-items: center; }
 
@@ -24,8 +25,8 @@ iframe { border: none; }
 .hide       { display: none; }
 .highlight  { color: #F1F1F1; }
 
-.dropdown-selector-div       { display: inline-block; position: relative; }
-.dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; overflow: hidden; z-index: 2; }
+.dropdown-selector-div       { display: inline-block; }
+.dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
 .dropdown-content span       { display: block; min-width: 200px; padding: 6px 0px; }
 .dropdown-content span:hover { background-color: white; color: #262626; }
 
@@ -33,7 +34,7 @@ iframe { border: none; }
     </style>
 
   </head>
-  <body onload="ChangeResolution('init');AddListeners();GetToken();SetDarkChatState()">
+  <body onload="ChangeResolution('init');AddListeners();GetToken();SetDarkChatState();">
 <!-- PAGE -->
     <div id="page">
 <!-- PAGE LEFT -->
@@ -81,6 +82,7 @@ iframe { border: none; }
 		      <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
 		    </div>
       </div>
+      <div id="float-chat"></div>
       <div id="page-right">
         <iframe id="frame-chat" src="about:blank" width="100%" height="100%"></iframe>
       </div>
