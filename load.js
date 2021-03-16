@@ -118,7 +118,7 @@ function GetToken() {
       }
       if (hashTest.indexOf(hashVar) === 0) {
         g_token = hashTest.substring(hashVar.length, hashTest.length);
-        console.log(g_token);
+        g_hasToken = true;
         break;
       }
     }
