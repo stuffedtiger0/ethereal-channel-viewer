@@ -118,6 +118,7 @@ function GetToken() {
       }
       if (hashTest.indexOf(hashVar) === 0) {
         g_token = hashTest.substring(hashVar.length, hashTest.length);
+        console.log(g_token);
         break;
       }
     }
@@ -162,7 +163,6 @@ function StepOneHelix() {
       "Authorization": "Bearer " + g_token
     },
     success: function(data, status, jqxhr) {
-      //console.log(data);
       g_dataUserTwitch = data;
       g_hasUserDataTwitch = true;
     },
@@ -206,7 +206,6 @@ function StepTwoHelix(init, destroy) {
       "Authorization": "Bearer " + g_token
     },
     success: function(data, status, jqxhr) {
-      //console.log(data);
       g_dataFollowsTwitch = data;
       if (!g_hasCountTwitch) {
         g_countHelix = parseInt(data.total);
@@ -248,10 +247,8 @@ function StepThreeHelix() {
       "Authorization": "Bearer " + g_token
     },
     success: function(data, status, jqxhr) {
-      //console.log(data);
       var spanT;
       var isLiveTwitch;
-      //console.log(g_dataFollowsTwitch.data.length);
       for (let ii = 0 ; ii < parseInt(g_dataFollowsTwitch.data.length) ; ii++) {
         isLiveTwitch = false;
         spanT = document.createElement("span");
