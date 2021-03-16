@@ -39,8 +39,8 @@ function AddListeners() {
 function ChangeResolution(newReso) {
   if (resoDropdown.classList.contains("show")) RemoveDisplay();
   var date = new Date();
-  date.setTime(date.getTime()+(30*24*60*60*1000));
-  var expires = "; expires="+date.toGMTString();
+  date.setTime(date.getTime() + (30*24*60*60*1000));
+  var expires = "; expires=" + date.toGMTString();
   if (newReso == "init") {
     var cookieVar = "reso=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -59,15 +59,15 @@ function ChangeResolution(newReso) {
     if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
       document.getElementById("frame-player").setAttribute("width", "1280");
       document.getElementById("frame-player").setAttribute("height", "720");
-      document.cookie = "reso=720p" + expires + "; path=/";
+      document.cookie = "reso=720p" + expires;
     } else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
       document.getElementById("frame-player").setAttribute("width", "852");
       document.getElementById("frame-player").setAttribute("height", "480");
-      document.cookie = "reso=480p" + expires + "; path=/";
+      document.cookie = "reso=480p" + expires;
     } else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
       document.getElementById("frame-player").setAttribute("width", "640");
       document.getElementById("frame-player").setAttribute("height", "360");
-      document.cookie = "reso=360p" + expires + "; path=/";
+      document.cookie = "reso=360p" + expires;
     }
   }
 }
@@ -108,34 +108,33 @@ function LoadUser() {
 }
 
 function GetToken() {
+  var hashVar = "access_token=";
   if (document.location.hash !== "") {
-    let hash = document.location.hash.split("&");
-    for (let ii = 0 ; ii < hash.length ; ii++) {
-      if (hash[ii].indexOf("#access_token") === 0) {
-        g_token = hash[ii];
+    let hashArray = document.location.hash.split("&");
+    for (let ii = 0 ; ii < hashArray.length ; ii++) {
+      var hashTest = hashArray[ii];
+      while (hashTest.charAt(0) == '#') {
+        hashTest = hashTest.substring(1);
+      }
+      if (hashTest.indexOf(hashVar) === 0) {
+        g_token = hashTest.substring(hashVar.length, hashTest.length);
         break;
-      }
-    }
-    hash = g_token.split("=");
-    let found = false;
-    for (let ii = 0 ; ii < hash.length ; ii++) {
-      if (found === false && hash[ii].indexOf("#access_token" === 0)) {
-        found = true;
-        continue;
-      }
-      if (found = true) {
-        g_token = hash[ii];
-        g_hasToken = true;
       }
     }
   }
 }
 
 function GetDarkChatState() {
-  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked;
+  var date = new Date();
+  date.setTime(date.getTime() + (30*24*60*60*1000));
+  var expires = "; expires=" + date.toGMTString();
+  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + expires;
 }
 
 function SetDarkChatState() {
+  var date = new Date();
+  date.setTime(date.getTime() + (30*24*60*60*1000));
+  var expires = "; expires=" + date.toGMTString();
   var cookieVar = "darkchatstate=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var cookieArray = decodedCookie.split(';');
@@ -149,6 +148,7 @@ function SetDarkChatState() {
       if (cookieCheck == "true") {
         document.getElementById("checkbox-darkchat").checked = cookieCheck;
       }
+      document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + expires;
     }
   }
 }
