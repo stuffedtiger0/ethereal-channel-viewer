@@ -19,17 +19,16 @@ iframe { border: none; }
 
 #follow-table-helix { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
-.title      { font-weight: bold; }
-.spanlink   { cursor: pointer; }
-.live       { color: lightgreen; }
-.highlight  { color: #F1F1F1; }
-.hide       { display: none; }
-
 .middle-top-row              { display: inline-block; }
 .dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
 .dropdown-content span       { display: block; min-width: 200px; padding: 6px 0px; }
 .dropdown-content span:hover { background-color: white; color: #262626; }
 
+.title      { font-weight: bold; }
+.spanlink   { cursor: pointer; }
+.live       { color: lightgreen; }
+.highlight  { color: #F1F1F1; }
+.hide       { display: none; }
 .show       { display: block; }
     </style>
 
@@ -49,7 +48,7 @@ iframe { border: none; }
       <div id="page-middle">
 	  	  <div id="middle-top">
 		      <div class="middle-top-row">
-            <button class="title" onclick="ToggleDisplay('resoDropdown');">Video Player Size</button>
+            <button onclick="ToggleDisplay('resoDropdown');">Video Player Size</button>
             <div class="dropdown-content" id="resoDropdown">
               <span class="spanlink" onclick="ChangeResolution('360p');">360p</span>
               <span class="spanlink" onclick="ChangeResolution('480p');">480p</span>
@@ -57,22 +56,22 @@ iframe { border: none; }
             </div>
           </div><!--
           --><div class="middle-top-row">
-            <button class="title" id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
+            <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
             <div class="dropdown-content" id="userDropdown">
               <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
             </div>
           </div><!--
           --><div class="middle-top-row">
-            <button class="title" id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
+            <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
             <div class="dropdown-content" id="channelDropdown">
               <span><input id="input-channel-twitch" type="text" placeholder="Press enter to load"></span>
             </div>
           </div><!--
           --><div class="middle-top-row">
-            <button class="title" id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
+            <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
           </div><!--
           --><div class="middle-top-row">
-            <button class="title" id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
+            <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
           </div><!--
           --><div class="middle-top-row">
             <input type="checkbox" id="checkbox-darkchat" name="checkbox-darkchat" value="Dark Chat" onclick="GetDarkChatState();">
