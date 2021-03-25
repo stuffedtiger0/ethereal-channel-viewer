@@ -107,10 +107,13 @@ function LoadUser() {
   }
 }
 
-function GetToken() {
+function GetToken(readCookie) {
   var hashVar = "access_token=";
-  if (document.location.hash !== "") {
-    let hashArray = document.location.hash.split("&");
+  var date = new Date();
+  date.setTime(date.getTime() + (30*24*60*60*1000));
+  var expires = "; expires=" + date.toGMTString();
+  if (document.location.hash && readCookie == undefined) {
+    var hashArray = document.location.hash.split("&");
     for (let ii = 0 ; ii < hashArray.length ; ii++) {
       var hashTest = hashArray[ii];
       while (hashTest.charAt(0) == '#') {
@@ -118,6 +121,25 @@ function GetToken() {
       }
       if (hashTest.indexOf(hashVar) === 0) {
         g_token = hashTest.substring(hashVar.length, hashTest.length);
+        g_hasToken = true;
+        document.cookie = "token=" + g_token + expires;
+        break;
+      }
+    }
+    if (g_hasToken === false) {
+      return GetToken(true);
+    }
+  } else if (!document.location.hash || readCookie === true) {
+    var cookieVar = "token=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    cookieArray = decodedCookie.split(';');
+    for (let ii = 0 ; ii < cookieArray.length ; ii++) {
+      var cookieTest = cookieArray[ii];
+      while (cookieTest.charAt(0) == ' ') {
+        cookieTest = cookieTest.substring(1);
+      }
+      if (cookieTest.indexOf(cookieVar) === 0) {
+        g_token = cookieTest.substring(cookieVar.length, cookieTest.length);
         g_hasToken = true;
         break;
       }
@@ -150,6 +172,7 @@ function SetDarkChatState() {
         document.getElementById("checkbox-darkchat").checked = cookieCheck;
       }
       document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + expires;
+      break;
     }
   }
 }
