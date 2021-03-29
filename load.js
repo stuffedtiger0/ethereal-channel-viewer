@@ -141,6 +141,7 @@ function GetToken(readCookie) {
       if (cookieTest.indexOf(cookieVar) === 0) {
         g_token = cookieTest.substring(cookieVar.length, cookieTest.length);
         g_hasToken = true;
+        document.cookie = "token=" + g_token + expires;
         break;
       }
     }
