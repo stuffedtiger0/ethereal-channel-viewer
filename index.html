@@ -11,19 +11,22 @@ body   { margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helv
 button { display: block; background-color: silver; color: #262626; min-width: 150px; padding: 10px; border: 1px solid black; cursor: pointer; }
 iframe { border: none; }
 
-#page        { display: flex; width: 100vw; height: 100vh; }
-#page-left   { display: flex; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; width: 250px; min-width: 250px; height: 100%; }
-#page-middle { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; height: 100%; z-index: 1; }
-#middle-top  { min-width: 950px; }
-#page-right  { position: absolute; right: 0; width: 340px; min-width: 340px; height: 100%; overflow: hidden; }
-#float-chat  { width: 340px; min-width: 340px; float: right; }
+#page        { display: flex; justify-content: space-between; width: 100vw; height: 100vh; }
+#page-left   { display: flex; flex-direction: column; align-items: center; position: absolute; left: 0; overflow-x: hidden; overflow-y: scroll; width: 250px; min-width: 250px; height: 100%; z-index: 3; }
+#page-middle { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1; }
+#page-right  { position: absolute; right: 0; width: 340px; min-width: 340px; height: 100%; overflow: hidden; z-index: 4; }
+
+#middle-top  { display: flex; flex-direction: column; align-items: center; width: 500px; min-width: 500px; }
+
+#pad-left  { width: 250px; min-width: 250px; }
+#pad-right { width: 340px; min-width: 340px; }
 
 #follow-table-helix { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
 .middle-top-row              { display: inline-block; }
 .dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
 .dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; }
-.dropdown-content span input { width: 140px; }
+.dropdown-content span input { width: 130px; }
 .dropdown-content span:hover { background-color: white; color: #262626; }
 
 .title      { font-weight: bold; }
@@ -39,6 +42,7 @@ iframe { border: none; }
 <!-- PAGE -->
     <div id="page">
 <!-- PAGE LEFT -->
+      <div id="pad-left"></div>
       <div id="page-left">
         <p><span class="spanlink title" title="click to update follow list" onclick="UpdateFollowListHelix();">[twitch]</span></p>
         <p><span class="spanlink" onclick="LoadChannel('');">No Channel</span></p>
@@ -49,42 +53,47 @@ iframe { border: none; }
 <!-- PAGE MIDDLE -->
       <div id="page-middle">
 	  	  <div id="middle-top">
-		      <div class="middle-top-row">
-            <button onclick="ToggleDisplay('resoDropdown');">Video Player Size</button>
-            <div class="dropdown-content" id="resoDropdown">
-              <span class="spanlink" onclick="ChangeResolution('360p');">360p</span>
-              <span class="spanlink" onclick="ChangeResolution('480p');">480p</span>
-              <span class="spanlink" onclick="ChangeResolution('720p');">720p</span>
+          <div id="middle-top-row1">
+            <div class="middle-top-row">
+              <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
+            </div><!--
+            --><div class="middle-top-row">
+              <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
+            </div><!--
+            --><div class="middle-top-row">
+              <input type="checkbox" id="checkbox-darkchat" name="checkbox-darkchat" value="Dark Chat" onclick="GetDarkChatState();">
+              <label for="checkbox-darkchat">Dark Chat</label>
             </div>
-          </div><!--
-          --><div class="middle-top-row">
-            <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
-            <div class="dropdown-content" id="userDropdown">
-              <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
+          </div>
+          <div id="middle-top-row2">
+            <div class="middle-top-row">
+              <button onclick="ToggleDisplay('resoDropdown');">Video Player Size</button>
+              <div class="dropdown-content" id="resoDropdown">
+                <span class="spanlink" onclick="ChangeResolution('360p');">360p</span>
+                <span class="spanlink" onclick="ChangeResolution('480p');">480p</span>
+                <span class="spanlink" onclick="ChangeResolution('720p');">720p</span>
+              </div>
+            </div><!--
+            --><div class="middle-top-row">
+              <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
+              <div class="dropdown-content" id="userDropdown">
+                <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
+              </div>
+            </div><!--
+            --><div class="middle-top-row">
+              <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
+              <div class="dropdown-content" id="channelDropdown">
+                <span><input id="input-channel-twitch" type="text" placeholder="Press enter to load"></span>
+              </div>
             </div>
-          </div><!--
-          --><div class="middle-top-row">
-            <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
-            <div class="dropdown-content" id="channelDropdown">
-              <span><input id="input-channel-twitch" type="text" placeholder="Press enter to load"></span>
-            </div>
-          </div><!--
-          --><div class="middle-top-row">
-            <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
-          </div><!--
-          --><div class="middle-top-row">
-            <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
-          </div><!--
-          --><div class="middle-top-row">
-            <input type="checkbox" id="checkbox-darkchat" name="checkbox-darkchat" value="Dark Chat" onclick="GetDarkChatState();">
-            <label for="checkbox-darkchat">Dark Chat</label>
           </div>
         </div>
     		<div id="middle-bottom">
 		      <iframe id="frame-player" src="about:blank" width="16" height="9" allowfullscreen="true"></iframe>
 		    </div>
       </div>
-      <div id="float-chat"></div>
+<!-- PAGE RIGHT -->
+      <div id="pad-right"></div>
       <div id="page-right">
         <iframe id="frame-chat" src="about:blank" width="100%" height="100%"></iframe>
       </div>
