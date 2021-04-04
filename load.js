@@ -3,6 +3,7 @@ var g_token, g_userName, g_hasCountTwitch, g_countHelix, g_pageHelix,
 var g_overlayIndex = 0;
 var g_hasToken = false;
 var g_hasUserDataTwitch = false;
+var playerHeight = setInterval(setPlayerHeight, 1000);
 
 function ToggleDisplay(selector) {
   if (document.getElementById(selector).classList.contains("show")) {
@@ -14,7 +15,6 @@ function ToggleDisplay(selector) {
 }
 
 function RemoveDisplay() {
-  document.getElementById("resoDropdown").classList.remove("show");
   document.getElementById("userDropdown").classList.remove("show");
   document.getElementById("channelDropdown").classList.remove("show");
 }
@@ -36,40 +36,10 @@ function AddListeners() {
   });
 }
 
-function ChangeResolution(newReso) {
-  if (resoDropdown.classList.contains("show")) RemoveDisplay();
-  var date = new Date();
-  date.setTime(date.getTime() + (30*24*60*60*1000));
-  var expires = "; expires=" + date.toGMTString();
-  if (newReso == "init") {
-    var cookieVar = "reso=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var cookieArray = decodedCookie.split(';');
-    for (let ii = 0 ; ii < cookieArray.length ; ii++) {
-      var cookieTest = cookieArray[ii];
-      while (cookieTest.charAt(0) == ' ') {
-        cookieTest = cookieTest.substring(1);
-      }
-      if (cookieTest.indexOf(cookieVar) == 0) {
-        return ChangeResolution(cookieTest.substring(cookieVar.length, cookieTest.length));
-      }
-    }
-    return ChangeResolution("360p");
-  } else {
-    if (newReso == "720p" && document.getElementById("frame-player").height != "720") {
-      document.getElementById("frame-player").setAttribute("width", "1280");
-      document.getElementById("frame-player").setAttribute("height", "720");
-      document.cookie = "reso=720p" + expires;
-    } else if (newReso == "480p" && document.getElementById("frame-player").height != "480") {
-      document.getElementById("frame-player").setAttribute("width", "852");
-      document.getElementById("frame-player").setAttribute("height", "480");
-      document.cookie = "reso=480p" + expires;
-    } else if (newReso == "360p" && document.getElementById("frame-player").height != "360") {
-      document.getElementById("frame-player").setAttribute("width", "640");
-      document.getElementById("frame-player").setAttribute("height", "360");
-      document.cookie = "reso=360p" + expires;
-    }
-  }
+function setPlayerHeight() {
+  var curWidth = parseInt(document.getElementById("frame-player").offsetWidth);
+  var newHeight = Math.floor(curWidth / 16 * 9);
+  document.getElementById("frame-player").setAttribute("height", newHeight);
 }
 
 function LoadChannel(channelName, service) {
