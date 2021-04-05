@@ -24,14 +24,14 @@ function AddListeners() {
   input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
-      LoadUser();
+      LoadUser(document.getElementById("input-user").value);
     }
   });
-  input = document.getElementById("input-channel-twitch");
+  input = document.getElementById("input-channel");
   input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
-      LoadChannel(document.getElementById("input-channel-twitch").value, "twitch");
+      LoadChannel(document.getElementById("input-channel").value);
     }
   });
 }
@@ -42,29 +42,26 @@ function setPlayerHeight() {
   document.getElementById("frame-player").setAttribute("height", newHeight);
 }
 
-function LoadChannel(channelName, service) {
-  if (channelDropdown.classList.contains("show")) RemoveDisplay();
+function LoadChannel(channelName) {
+  RemoveDisplay();
   if (channelName == "") {
     document.getElementById("current-channel").innerHTML = "No Channel Loaded";
     document.getElementById("frame-player").setAttribute("src", "about:blank");
     document.getElementById("frame-chat").setAttribute("src", "about:blank");
   } else {
     document.getElementById("current-channel").innerHTML = channelName;
-    if (service == "twitch") {
-      document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
-      if (document.getElementById("checkbox-darkchat").checked === true) {
-        document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
-      } else {
-        document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io");
-      }
+    document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
+    if (document.getElementById("checkbox-darkchat").checked === true) {
+      document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
+    } else {
+      document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io");
     }
   }
 }
 
-function LoadUser() {
-  if (userDropdown.classList.contains("show")) RemoveDisplay();
-  var userName = document.getElementById("input-user").value;
-  var oldTable = document.getElementById("follow-table-helix");
+function LoadUser(userName) {
+  RemoveDisplay();
+  var oldTable = document.getElementById("follow-table");
   if (oldTable) oldTable.parentNode.removeChild(oldTable);
   if (g_hasToken === true && userName !== "") {
     document.getElementById("current-user").innerHTML = userName;
@@ -77,11 +74,15 @@ function LoadUser() {
   }
 }
 
+function CookieExp() {
+  var date = new Date();
+  date.setTime(date.getTime() + (360*24*60*60*1000));
+  var expires = "; expires=" + date.toGMTString();
+  return expires;
+}
+
 function GetToken(readCookie) {
   var hashVar = "access_token=";
-  var date = new Date();
-  date.setTime(date.getTime() + (30*24*60*60*1000));
-  var expires = "; expires=" + date.toGMTString();
   if (document.location.hash && readCookie == undefined) {
     var hashArray = document.location.hash.split("&");
     for (let ii = 0 ; ii < hashArray.length ; ii++) {
@@ -92,7 +93,7 @@ function GetToken(readCookie) {
       if (hashTest.indexOf(hashVar) === 0) {
         g_token = hashTest.substring(hashVar.length, hashTest.length);
         g_hasToken = true;
-        document.cookie = "token=" + g_token + expires;
+        document.cookie = "token=" + g_token + CookieExp();
         break;
       }
     }
@@ -111,7 +112,7 @@ function GetToken(readCookie) {
       if (cookieTest.indexOf(cookieVar) === 0) {
         g_token = cookieTest.substring(cookieVar.length, cookieTest.length);
         g_hasToken = true;
-        document.cookie = "token=" + g_token + expires;
+        document.cookie = "token=" + g_token + CookieExp();
         break;
       }
     }
@@ -119,16 +120,10 @@ function GetToken(readCookie) {
 }
 
 function GetDarkChatState() {
-  var date = new Date();
-  date.setTime(date.getTime() + (30*24*60*60*1000));
-  var expires = "; expires=" + date.toGMTString();
-  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + expires;
+  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + CookieExp();
 }
 
 function SetDarkChatState() {
-  var date = new Date();
-  date.setTime(date.getTime() + (30*24*60*60*1000));
-  var expires = "; expires=" + date.toGMTString();
   var cookieVar = "darkchatstate=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var cookieArray = decodedCookie.split(';');
@@ -142,7 +137,7 @@ function SetDarkChatState() {
       if (cookieCheck == "true") {
         document.getElementById("checkbox-darkchat").checked = cookieCheck;
       }
-      document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + expires;
+      document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + CookieExp();
       break;
     }
   }
@@ -179,15 +174,15 @@ function StepTwoHelix(init, destroy) {
     g_hasFirstInTableTwitch = false;
     if (!destroy) {
       let tableT = document.createElement("div");
-      tableT.setAttribute("id", "follow-table-helix");
+      tableT.setAttribute("id", "follow-table");
       document.getElementById("follows-helix").appendChild(tableT);
     }
   }
   if (destroy) {
-    let oldTableT = document.getElementById("follow-table-helix");
+    let oldTableT = document.getElementById("follow-table");
     if (oldTableT) oldTableT.parentNode.removeChild(oldTableT);
     let tableT = document.createElement("div");
-    tableT.setAttribute("id", "follow-table-helix");
+    tableT.setAttribute("id", "follow-table");
     document.getElementById("follows-helix").appendChild(tableT);
   }
   document.getElementById("follows-helix").classList.remove("show");
@@ -260,15 +255,15 @@ function StepThreeHelix() {
         if (!isLiveTwitch) {
           spanT.innerHTML = g_dataFollowsTwitch.data[ii].to_name;
         }
-        spanT.onclick = function(event) { LoadChannel(event.target.index, "twitch"); };
+        spanT.onclick = function(event) { LoadChannel(event.target.index); };
         if (!g_hasFirstInTableTwitch) {
-          document.getElementById("follow-table-helix").appendChild(spanT);
+          document.getElementById("follow-table").appendChild(spanT);
           g_hasFirstInTableTwitch = true;
         } else {
           if (isLiveTwitch) {
-            document.getElementById("follow-table-helix").insertBefore(spanT, document.getElementById("follow-table-helix").firstChild);
+            document.getElementById("follow-table").insertBefore(spanT, document.getElementById("follow-table").firstChild);
           } else {
-            document.getElementById("follow-table-helix").appendChild(spanT);
+            document.getElementById("follow-table").appendChild(spanT);
           }
         }
       }
