@@ -51,11 +51,7 @@ function LoadChannel(channelName) {
   } else {
     document.getElementById("current-channel").innerHTML = channelName;
     document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
-    if (document.getElementById("checkbox-darkchat").checked === true) {
-      document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
-    } else {
-      document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io");
-    }
+    document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
   }
 }
 
@@ -115,30 +111,6 @@ function GetToken(readCookie) {
         document.cookie = "token=" + g_token + CookieExp();
         break;
       }
-    }
-  }
-}
-
-function GetDarkChatState() {
-  document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + CookieExp();
-}
-
-function SetDarkChatState() {
-  var cookieVar = "darkchatstate=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var cookieArray = decodedCookie.split(';');
-  for (let ii = 0 ; ii < cookieArray.length ; ii++) {
-    var cookieTest = cookieArray[ii];
-    while (cookieTest.charAt(0) == ' ') {
-      cookieTest = cookieTest.substring(1);
-    }
-    if (cookieTest.indexOf(cookieVar) == 0) {
-      var cookieCheck = cookieTest.substring(cookieVar.length, cookieTest.length);
-      if (cookieCheck == "true") {
-        document.getElementById("checkbox-darkchat").checked = cookieCheck;
-      }
-      document.cookie = "darkchatstate=" + document.getElementById("checkbox-darkchat").checked + CookieExp();
-      break;
     }
   }
 }
