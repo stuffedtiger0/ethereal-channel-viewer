@@ -8,25 +8,28 @@
 
     <style>
 html,body { margin: 0; width: 100vw; height: 100vh; }
-body      { background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
-button    { display: block; background-color: silver; color: #262626; min-width: 150px; padding: 10px; border: 1px solid black; cursor: pointer; }
+body      { background-color: #161616; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
+button    { display: block; background-color: silver; color: #262626; border-radius: 10px; min-width: 150px; padding: 10px; border: 1px solid #F1F1F1; cursor: pointer; transition-duration: 0.4s; }
 iframe    { border: none; }
-p         { margin: 0 0 10px 0; }
+p         { margin: 10px 0; }
+
+button:hover { background-color: #262626; color: silver; }
+button:focus { outline: none; }
 
 #page           { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; }
-#header         { width: 678px; min-width: 678px; height: 37px; min-height: 37px; }
-#content        { display: flex; justify-content: center; width: 100%; flex: 1 1 auto; }
-#content-left   { width: 250px; min-width: 250px; overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column; align-items: center; background-color: #262626; z-index: 3; }
+#header         { width: 691px; min-width: 691px; height: 37px; min-height: 37px; }
+#content        { display: flex; justify-content: center; width: 100%; flex: 1 1 auto; background-color: #262626; }
+#content-left   { width: 250px; min-width: 250px; overflow-x: hidden; overflow-y: scroll; scrollbar-width: none; display: flex; flex-direction: column; align-items: center; background-color: #262626; z-index: 3; }
 #content-middle { flex: 1 1 auto; z-index: 1; }
 #content-right  { width: 340px; min-width: 340px; overflow: hidden; background-color: #262626; z-index: 4; }
 
 #follow-table { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
 .header-item                 { display: inline-block; }
-.dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
-.dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; }
+.dropdown-content            { display: none; position: absolute; background-color: silver; color: #262626; text-align: center; z-index: 2; }
+.dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; transition-duration: 0.4s; }
 .dropdown-content span input { width: 130px; }
-.dropdown-content span:hover { background-color: white; color: #262626; }
+.dropdown-content span:hover { background-color: #262626; color: silver; }
 
 .title      { font-weight: bold; }
 .spanlink   { cursor: pointer; }
@@ -34,6 +37,8 @@ p         { margin: 0 0 10px 0; }
 .highlight  { color: #F1F1F1; }
 .hide       { display: none; }
 .show       { display: block; }
+
+::-webkit-scrollbar { width: 0; }
     </style>
 
   </head>
@@ -45,17 +50,17 @@ p         { margin: 0 0 10px 0; }
           <div class="dropdown-content" id="userDropdown">
             <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
           </div>
-        </div><!--
-        --><div class="header-item">
+        </div>
+        <div class="header-item">
           <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
           <div class="dropdown-content" id="channelDropdown">
             <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
           </div>
-        </div><!--
-        --><div class="header-item">
+        </div>
+        <div class="header-item">
           <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
-        </div><!--
-        --><div class="header-item">
+        </div>
+        <div class="header-item">
           <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
         </div>
       </div>
