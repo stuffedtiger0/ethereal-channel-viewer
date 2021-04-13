@@ -7,24 +7,22 @@
     <script src="load.js"></script>
 
     <style>
-body   { margin: 0; background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
-button { display: block; background-color: silver; color: #262626; min-width: 150px; padding: 10px; border: 1px solid black; cursor: pointer; }
-iframe { border: none; }
+html,body { margin: 0; width: 100vw; height: 100vh; }
+body      { background-color: #262626; color: #F1F1F1; font-family: Helvetica, Arial, sans-serif; }
+button    { display: block; background-color: silver; color: #262626; min-width: 150px; padding: 10px; border: 1px solid black; cursor: pointer; }
+iframe    { border: none; }
+p         { margin: 0 0 10px 0; }
 
-#page        { display: flex; justify-content: center; width: 100vw; height: 100vh; }
-#page-left   { display: flex; flex-direction: column; align-items: center; position: absolute; left: 0; overflow-x: hidden; overflow-y: scroll; width: 250px; min-width: 250px; height: 100%; background-color: #262626; z-index: 3; }
-#page-middle { display: flex; flex-direction: column; justify-content: flex-start; flex-basis: 100%; align-items: center; z-index: 1; }
-#page-right  { position: absolute; right: 0; width: 340px; min-width: 340px; height: 100%; overflow: hidden; background-color: #262626; z-index: 4; }
-
-#middle-top    { width: 700px; min-width: 700px; }
-#middle-bottom { width: 100%; }
-
-#pad-left  { width: 250px; min-width: 250px; }
-#pad-right { width: 340px; min-width: 340px; }
+#page           { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; }
+#header         { width: 678px; min-width: 678px; height: 37px; min-height: 37px; }
+#content        { display: flex; justify-content: center; width: 100%; flex: 1 1 auto; }
+#content-left   { width: 250px; min-width: 250px; overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column; align-items: center; background-color: #262626; z-index: 3; }
+#content-middle { flex: 1 1 auto; z-index: 1; }
+#content-right  { width: 340px; min-width: 340px; overflow: hidden; background-color: #262626; z-index: 4; }
 
 #follow-table { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
-.middle-top-item              { display: inline-block; }
+.header-item                 { display: inline-block; }
 .dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
 .dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; }
 .dropdown-content span input { width: 130px; }
@@ -40,47 +38,45 @@ iframe { border: none; }
 
   </head>
   <body onload="AddListeners();GetToken();">
-<!-- PAGE -->
     <div id="page">
-<!-- PAGE LEFT -->
-      <div id="pad-left"></div>
-      <div id="page-left">
-        <p><span class="spanlink title" title="click to update follow list" onclick="UpdateFollowListHelix();">[twitch]</span></p>
-        <p><span class="spanlink" onclick="LoadChannel('');">No Channel</span></p>
-        <p class="hide" id="invalid-username-helix"><span class="title">INVALID USERNAME</span></p>
-        <p class="hide" id="loading-helix"><span class="title">LOADING...</span></p>
-        <div class="hide" id="follows-helix"></div>
-      </div>
-<!-- PAGE MIDDLE -->
-      <div id="page-middle">
-	  	  <div id="middle-top">
-          <div class="middle-top-item">
-            <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
-            <div class="dropdown-content" id="userDropdown">
-              <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
-            </div>
-          </div><!--
-          --><div class="middle-top-item">
-            <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
-            <div class="dropdown-content" id="channelDropdown">
-              <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
-            </div>
-          </div><!--
-          --><div class="middle-top-item">
-            <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
-          </div><!--
-          --><div class="middle-top-item">
-            <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
+      <div id="header">
+        <div class="header-item">
+          <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
+          <div class="dropdown-content" id="userDropdown">
+            <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
           </div>
+        </div><!--
+        --><div class="header-item">
+          <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
+          <div class="dropdown-content" id="channelDropdown">
+            <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
+          </div>
+        </div><!--
+        --><div class="header-item">
+          <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
+        </div><!--
+        --><div class="header-item">
+          <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
         </div>
-    		<div id="middle-bottom">
-		      <iframe id="frame-player" src="about:blank" width="100%" height="9" allowfullscreen="true"></iframe>
-		    </div>
       </div>
-<!-- PAGE RIGHT -->
-      <div id="pad-right"></div>
-      <div id="page-right">
-        <iframe id="frame-chat" src="about:blank" width="100%" height="100%"></iframe>
+  <!-- CONTENT -->
+      <div id="content">
+  <!-- CONTENT LEFT -->
+        <div id="content-left">
+          <p><span class="spanlink title" title="click to update follow list" onclick="UpdateFollowListHelix();">[twitch]</span></p>
+          <p><span class="spanlink" onclick="LoadChannel('');">No Channel</span></p>
+          <p class="hide" id="invalid-username-helix"><span class="title">INVALID USERNAME</span></p>
+          <p class="hide" id="loading-helix"><span class="title">LOADING...</span></p>
+          <div class="hide" id="follows-helix"></div>
+        </div>
+  <!-- CONTENT MIDDLE -->
+        <div id="content-middle">
+          <iframe id="frame-player" src="about:blank" width="100%" height="9" allowfullscreen="true"></iframe>
+        </div>
+  <!-- CONTENT RIGHT -->
+        <div id="content-right">
+          <iframe id="frame-chat" src="about:blank" width="100%" height="100%"></iframe>
+        </div>
       </div>
     </div>
   </body>
