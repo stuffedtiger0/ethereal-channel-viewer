@@ -16,7 +16,7 @@ iframe { border: none; }
 #page-middle { display: flex; flex-direction: column; justify-content: flex-start; flex-basis: 100%; align-items: center; z-index: 1; }
 #page-right  { position: absolute; right: 0; width: 340px; min-width: 340px; height: 100%; overflow: hidden; background-color: #262626; z-index: 4; }
 
-#middle-top    { display: flex; flex-direction: column; align-items: center; width: 500px; min-width: 500px; }
+#middle-top    { width: 700px; min-width: 700px; }
 #middle-bottom { width: 100%; }
 
 #pad-left  { width: 250px; min-width: 250px; }
@@ -24,7 +24,7 @@ iframe { border: none; }
 
 #follow-table { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
-.middle-top-row              { display: inline-block; }
+.middle-top-item              { display: inline-block; }
 .dropdown-content            { display: none; position: absolute; background-color: black; color: #F1F1F1; text-align: center; z-index: 2; }
 .dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; }
 .dropdown-content span input { width: 130px; }
@@ -54,27 +54,23 @@ iframe { border: none; }
 <!-- PAGE MIDDLE -->
       <div id="page-middle">
 	  	  <div id="middle-top">
-          <div id="middle-top-row1">
-            <div class="middle-top-row">
-              <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
-            </div><!--
-            --><div class="middle-top-row">
-              <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
+          <div class="middle-top-item">
+            <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
+            <div class="dropdown-content" id="userDropdown">
+              <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
             </div>
-          </div>
-          <div id="middle-top-row2">
-            <div class="middle-top-row">
-              <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
-              <div class="dropdown-content" id="userDropdown">
-                <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
-              </div>
-            </div><!--
-            --><div class="middle-top-row">
-              <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
-              <div class="dropdown-content" id="channelDropdown">
-                <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
-              </div>
+          </div><!--
+          --><div class="middle-top-item">
+            <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
+            <div class="dropdown-content" id="channelDropdown">
+              <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
             </div>
+          </div><!--
+          --><div class="middle-top-item">
+            <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
+          </div><!--
+          --><div class="middle-top-item">
+            <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
           </div>
         </div>
     		<div id="middle-bottom">
