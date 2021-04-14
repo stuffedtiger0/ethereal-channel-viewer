@@ -7,16 +7,15 @@ var playerHeight = setInterval(setPlayerHeight, 1000);
 
 function ToggleDisplay(selector) {
   if (document.getElementById(selector).classList.contains("show")) {
-    RemoveDisplay();
+    document.getElementById(selector).classList.remove("show");
+    document.activeElement.blur();
   } else {
-    RemoveDisplay();
-    document.getElementById(selector).classList.toggle("show");
+    var elements = document.getElementsByClassName("dropdown-content show");
+    while (elements[0]) {
+      elements[0].classList.remove("show");
+    }
+    document.getElementById(selector).classList.add("show");
   }
-}
-
-function RemoveDisplay() {
-  document.getElementById("userDropdown").classList.remove("show");
-  document.getElementById("channelDropdown").classList.remove("show");
 }
 
 function AddListeners() {
@@ -261,5 +260,8 @@ function UpdateFollowListHelix() {
 }
 
 function MakeMeFamous() {
-  document.getElementById("button-contact").classList.toggle("highlight");
+  var elements = document.getElementsByClassName("dropdown-content show");
+  while (elements[0]) {
+    elements[0].classList.remove("show");
+  }
 }
