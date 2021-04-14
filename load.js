@@ -6,15 +6,22 @@ var g_hasUserDataTwitch = false;
 var playerHeight = setInterval(setPlayerHeight, 1000);
 
 function ToggleDisplay(selector) {
-  if (document.getElementById(selector).classList.contains("show")) {
-    document.getElementById(selector).classList.remove("show");
-    document.activeElement.blur();
-  } else {
+  if (selector === null) {
     var elements = document.getElementsByClassName("dropdown-content show");
     while (elements[0]) {
       elements[0].classList.remove("show");
     }
-    document.getElementById(selector).classList.add("show");
+  } else {
+    if (document.getElementById(selector).classList.contains("show")) {
+      document.getElementById(selector).classList.remove("show");
+      document.activeElement.blur();
+    } else {
+      var elements = document.getElementsByClassName("dropdown-content show");
+      while (elements[0]) {
+        elements[0].classList.remove("show");
+      }
+      document.getElementById(selector).classList.add("show");
+    }
   }
 }
 
@@ -42,7 +49,7 @@ function setPlayerHeight() {
 }
 
 function LoadChannel(channelName) {
-  RemoveDisplay();
+  ToggleDisplay(null);
   if (channelName == "") {
     document.getElementById("current-channel").innerHTML = "No Channel Loaded";
     document.getElementById("frame-player").setAttribute("src", "about:blank");
@@ -55,7 +62,7 @@ function LoadChannel(channelName) {
 }
 
 function LoadUser(userName) {
-  RemoveDisplay();
+  ToggleDisplay(null);
   var oldTable = document.getElementById("follow-table");
   if (oldTable) oldTable.parentNode.removeChild(oldTable);
   if (g_hasToken === true && userName !== "") {
