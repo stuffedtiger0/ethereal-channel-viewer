@@ -13,13 +13,13 @@ button    { display: block; background-color: silver; color: #262626; border-rad
 iframe    { border: none; }
 p         { margin: 10px 0; }
 
-button:focus { background-color: #262626; color: silver; outline: none; }
+button:hover { background-color: #262626; color: silver; outline: none; }
 
 #page           { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; }
 #header         { width: 100%; min-width: 700px; min-height: 40px; text-align: center; }
 #content        { width: 100%; height: calc(100% - 40px); display: flex; justify-content: center; background-color: #262626; }
 #content-left   { width: 250px; min-width: 250px; overflow-x: hidden; overflow-y: scroll; display: flex; flex-direction: column; align-items: center; background-color: #161616; z-index: 3; }
-#content-middle { flex: 1 1 auto; z-index: 1; background-color: #060606; }
+#content-middle { flex: 1 1 auto; background-color: #060606; z-index: 1; }
 #content-right  { width: 340px; min-width: 340px; overflow: hidden; background-color: #161616; z-index: 4; }
 
 #content-left::-webkit-scrollbar { display: none; }
@@ -27,11 +27,12 @@ button:focus { background-color: #262626; color: silver; outline: none; }
 
 #follow-table { width: 500px; display: flex; flex-direction: column; align-items: center; }
 
-.header-item                 { display: inline-block; }
-.dropdown-content            { display: none; position: absolute; background-color: silver; color: #262626; text-align: center; z-index: 2; }
-.dropdown-content span       { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; transition-duration: 0.4s; }
-.dropdown-content span input { width: 130px; }
-.dropdown-content span:hover { background-color: #262626; color: silver; }
+.header-item                         { display: inline-block; }
+.header-item:hover .dropdown-content { display: block; }
+.dropdown-content                    { display: none; position: absolute; text-align: center; z-index: 2; }
+.dropdown-content span               { display: block; min-width: 150px; max-width: 150px; padding: 5px 0px; background-color: silver; color: #262626; border-radius: 10px; font-size: 12px; transition-duration: 0.4s; }
+.dropdown-content span input         { width: 130px; outline: none; }
+.dropdown-content span:hover         { background-color: #262626; color: silver; }
 
 .title      { font-weight: bold; }
 .spanlink   { cursor: pointer; }
@@ -45,14 +46,14 @@ button:focus { background-color: #262626; color: silver; outline: none; }
     <div id="page">
       <div id="header">
         <div class="header-item">
-          <button id="current-user" onclick="ToggleDisplay('userDropdown');">User</button>
-          <div class="dropdown-content" id="userDropdown">
+          <button id="current-user">User</button>
+          <div class="dropdown-content" id="user-dropdown">
             <span><input id="input-user" type="text" placeholder="Press enter to load"></span>
           </div>
         </div>
         <div class="header-item">
-          <button id="current-channel" onclick="ToggleDisplay('channelDropdown');">Channel</button>
-          <div class="dropdown-content" id="channelDropdown">
+          <button id="current-channel">Channel</button>
+          <div class="dropdown-content" id="channel-dropdown">
             <span><input id="input-channel" type="text" placeholder="Press enter to load"></span>
           </div>
         </div>
@@ -60,7 +61,10 @@ button:focus { background-color: #262626; color: silver; outline: none; }
           <button id="button-authenticate" onclick="window.location.href='https://id.twitch.tv/oauth2/authorize?client_id=k8nkd1h57i2l2a3mp4g46iwm2z15tg&redirect_uri=https://stffdtiger.github.io/ethcv/&response_type=token&scope='">Authenticate</button>
         </div>
         <div class="header-item">
-          <button id="button-contact" onclick="MakeMeFamous();">Discord Contact: stuffedtiger#9803</button>
+          <button id="button-contact">Contact</button>
+          <div class="dropdown-content" id="contact-dropdown">
+            <span>Discord: stuffedtiger#9803</span>
+          </div>
         </div>
       </div>
   <!-- CONTENT -->

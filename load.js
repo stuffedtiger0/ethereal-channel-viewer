@@ -4,26 +4,7 @@ var g_overlayIndex = 0;
 var g_hasToken = false;
 var g_hasUserDataTwitch = false;
 var playerHeight = setInterval(setPlayerHeight, 1000);
-
-function ToggleDisplay(selector) {
-  if (selector === null) {
-    var elements = document.getElementsByClassName("dropdown-content show");
-    while (elements[0]) {
-      elements[0].classList.remove("show");
-    }
-  } else {
-    if (document.getElementById(selector).classList.contains("show")) {
-      document.getElementById(selector).classList.remove("show");
-      document.activeElement.blur();
-    } else {
-      var elements = document.getElementsByClassName("dropdown-content show");
-      while (elements[0]) {
-        elements[0].classList.remove("show");
-      }
-      document.getElementById(selector).classList.add("show");
-    }
-  }
-}
+var buttonFade = setInterval(setButtonFade, 100);
 
 function AddListeners() {
   var input = document.getElementById("input-user");
@@ -48,32 +29,8 @@ function setPlayerHeight() {
   document.getElementById("frame-player").setAttribute("height", newHeight);
 }
 
-function LoadChannel(channelName) {
-  ToggleDisplay(null);
-  if (channelName == "") {
-    document.getElementById("current-channel").innerHTML = "No Channel Loaded";
-    document.getElementById("frame-player").setAttribute("src", "about:blank");
-    document.getElementById("frame-chat").setAttribute("src", "about:blank");
-  } else {
-    document.getElementById("current-channel").innerHTML = channelName;
-    document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
-    document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
-  }
-}
+function setButtonFade() {
 
-function LoadUser(userName) {
-  ToggleDisplay(null);
-  var oldTable = document.getElementById("follow-table");
-  if (oldTable) oldTable.parentNode.removeChild(oldTable);
-  if (g_hasToken === true && userName !== "") {
-    document.getElementById("current-user").innerHTML = userName;
-    g_userName = userName;
-    return StepOneHelix();
-  } else if (g_hasToken === false) {
-    alert("You need to authenticate to use the follow list feature.");
-  } else {
-    document.getElementById("current-user").innerHTML = "No User Loaded";
-  }
 }
 
 function CookieExp() {
@@ -118,6 +75,32 @@ function GetToken(readCookie) {
         break;
       }
     }
+  }
+}
+
+function LoadUser(userName) {
+  var oldTable = document.getElementById("follow-table");
+  if (oldTable) oldTable.parentNode.removeChild(oldTable);
+  if (g_hasToken === true && userName !== "") {
+    document.getElementById("current-user").innerHTML = userName;
+    g_userName = userName;
+    return StepOneHelix();
+  } else if (g_hasToken === false) {
+    alert("You need to authenticate to use the follow list feature.");
+  } else {
+    document.getElementById("current-user").innerHTML = "No User Loaded";
+  }
+}
+
+function LoadChannel(channelName) {
+  if (channelName == "") {
+    document.getElementById("current-channel").innerHTML = "No Channel Loaded";
+    document.getElementById("frame-player").setAttribute("src", "about:blank");
+    document.getElementById("frame-chat").setAttribute("src", "about:blank");
+  } else {
+    document.getElementById("current-channel").innerHTML = channelName;
+    document.getElementById("frame-player").setAttribute("src", "https://player.twitch.tv/?channel="+channelName+"&parent=stffdtiger.github.io&muted=false");
+    document.getElementById("frame-chat").setAttribute("src", "https://www.twitch.tv/embed/"+channelName+"/chat?parent=stffdtiger.github.io&darkpopout");
   }
 }
 
@@ -264,11 +247,4 @@ function StepThreeHelix() {
 
 function UpdateFollowListHelix() {
   if (g_hasUserDataTwitch) return StepTwoHelix(true, true);
-}
-
-function MakeMeFamous() {
-  var elements = document.getElementsByClassName("dropdown-content show");
-  while (elements[0]) {
-    elements[0].classList.remove("show");
-  }
 }
