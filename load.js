@@ -121,7 +121,6 @@ function StepOneHelix() {
         document.getElementById("invalid-username-helix").classList.add("show");
         g_hasUserDataTwitch = false;
       } else if (status == "success") {
-        document.getElementById("invalid-username-helix").classList.remove("show");
         return StepTwoHelix(true, false);
       }
     }
