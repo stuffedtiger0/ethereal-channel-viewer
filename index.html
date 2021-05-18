@@ -12,7 +12,6 @@ body      { background-color: #262626; color: #F1F1F1; font-family: Helvetica, A
 button    { display: block; background-color: #B1B1B1; color: #262626; border-radius: 10px; outline: none; width: 150px; min-width: 150px; padding: 10px; border: 1px solid #F1F1F1; cursor: pointer; transition-duration: 0.4s; }
 input     { outline: none; }
 iframe    { border: none; }
-p         { margin: 10px 0; }
 
 button:hover { background-color: #262626; color: #B1B1B1; }
 
@@ -40,11 +39,13 @@ button:hover { background-color: #262626; color: #B1B1B1; }
 .dropdown-content span input { width: 130px; }
 .dropdown-content span:hover { background-color: #262626; color: #B1B1B1; }
 
-.title      { font-weight: bold; }
-.spanlink   { cursor: pointer; }
-.live       { color: lightgreen; }
-.hide       { display: none; }
-.show       { display: block; }
+.spanlink        { cursor: pointer; }
+.title           { font-weight: bold; }
+.marginbottomtop { margin: 10px 0 10px 0; }
+.marginbottom    { margin: 0 0 10px 0; }
+.live            { color: lightgreen; }
+.hide            { display: none; }
+.show            { display: block; }
     </style>
 
   </head>
@@ -84,8 +85,8 @@ button:hover { background-color: #262626; color: #B1B1B1; }
       <div id="content">
   <!-- CONTENT LEFT -->
         <div id="content-left">
-          <p><span class="spanlink title" title="click to unload the current channel" onclick="LoadChannel('');">Unload Channel</span></p>
-          <p><span class="spanlink title" title="click to update the follow list" onclick="UpdateFollowListHelix();">[following]</span></p>
+          <span class="spanlink title marginbottomtop" title="click to unload the current channel" onclick="LoadChannel('');">Unload Channel</span>
+          <span class="spanlink title marginbottom" title="click to update the follow list" onclick="UpdateFollowListHelix();">[following]</span>
           <p class="hide" id="invalid-username-helix"><span class="title">INVALID USERNAME</span></p>
           <p class="hide" id="loading-helix"><span class="title">LOADING...</span></p>
           <div class="hide" id="follows-helix"></div>
