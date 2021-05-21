@@ -11,6 +11,7 @@ function AddListeners() {
     if (event.keyCode === 13) {
       event.preventDefault();
       LoadUser(document.getElementById("input-user").value);
+      ToggleDisplay("user-dropdown");
     }
   });
   input = document.getElementById("input-channel");
@@ -18,6 +19,7 @@ function AddListeners() {
     if (event.keyCode === 13) {
       event.preventDefault();
       LoadChannel(document.getElementById("input-channel").value);
+      ToggleDisplay("channel-dropdown");
     }
   });
 }
