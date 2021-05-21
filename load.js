@@ -4,7 +4,6 @@ var g_overlayIndex = 0;
 var g_hasToken = false;
 var g_hasUserDataTwitch = false;
 var playerHeight = setInterval(setPlayerHeight, 1000);
-var buttonFade = setInterval(setButtonFade, 100);
 
 function AddListeners() {
   var input = document.getElementById("input-user");
@@ -23,14 +22,24 @@ function AddListeners() {
   });
 }
 
+function ToggleDisplay(section) {
+  var element = document.getElementById(section);
+  if (element.classList.contains("showblock")) {
+    element.classList.remove("showblock");
+  } else {
+    var elements = document.getElementsByClassName("dropdown-content showblock");
+    while (elements[0]) {
+      elements[0].classList.remove("showblock");
+      elements = document.getElementsByClassName("dropdown-content showblock");
+    }
+    element.classList.add("showblock");
+  }
+}
+
 function setPlayerHeight() {
   var curWidth = parseInt(document.getElementById("frame-player").offsetWidth);
   var newHeight = Math.floor(curWidth / 16 * 9);
   document.getElementById("frame-player").setAttribute("height", newHeight);
-}
-
-function setButtonFade() {
-
 }
 
 function CookieExp() {
