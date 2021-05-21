@@ -127,10 +127,10 @@ function StepOneHelix() {
     },
     complete: function(jqxhr, status) {
       if (!g_dataUserTwitch.data[0]) {
-        document.getElementById("invalid-username-helix").classList.add("show");
+        document.getElementById("invalid-username-helix").classList.add("showblock");
         g_hasUserDataTwitch = false;
       } else if (status == "success") {
-        document.getElementById("invalid-username-helix").classList.remove("show");
+        document.getElementById("invalid-username-helix").classList.remove("showblock");
         return StepTwoHelix(true, false);
       }
     }
@@ -155,8 +155,8 @@ function StepTwoHelix(init, destroy) {
     tableT.setAttribute("id", "follow-table");
     document.getElementById("follows-helix").appendChild(tableT);
   }
-  document.getElementById("follows-helix").classList.remove("show");
-  document.getElementById("loading-helix").classList.add("show");
+  document.getElementById("follows-helix").classList.remove("showblock");
+  document.getElementById("loading-helix").classList.add("showblock");
   $.ajax({
     type: "GET",
     url: "https://api.twitch.tv/helix/users/follows?from_id=" + g_dataUserTwitch.data[0].id + "&first=100&after=" + g_pageHelix,
@@ -190,8 +190,8 @@ function StepTwoHelix(init, destroy) {
       if (status == "success") {
         return StepThreeHelix();
       } else {
-        document.getElementById("loading-helix").classList.remove("show");
-        document.getElementById("follows-helix").classList.add("show");
+        document.getElementById("loading-helix").classList.remove("showblock");
+        document.getElementById("follows-helix").classList.add("showblock");
       }
     }
   });
@@ -243,12 +243,12 @@ function StepThreeHelix() {
         if (g_countHelix > 0) {
           return StepTwoHelix(false, false);
         } else {
-          document.getElementById("loading-helix").classList.remove("show");
-          document.getElementById("follows-helix").classList.add("show");
+          document.getElementById("loading-helix").classList.remove("showblock");
+          document.getElementById("follows-helix").classList.add("showblock");
         }
       } else {
-        document.getElementById("loading-helix").classList.remove("show");
-        document.getElementById("follows-helix").classList.add("show");
+        document.getElementById("loading-helix").classList.remove("showblock");
+        document.getElementById("follows-helix").classList.add("showblock");
       }
     }
   });
